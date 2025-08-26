@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Southern Storm Software, Pty Ltd.
+ * Copyright (C) 2018 Southern Storm Software, Pty Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -22,21 +22,40 @@
 
 #pragma once
 
-#include <inttypes.h>
-#include <stddef.h>
+#include "Core_AuthenticatedCipher.h"
 
-class Core_NoiseSource
+class Core_Ascon128 : public Core_AuthenticatedCipher
 {
 public:
-    Core_NoiseSource();
-    virtual ~Core_NoiseSource();
+    Core_Ascon128();
+    virtual ~Core_Ascon128();
 
-    virtual bool calibrating() const = 0;
-    virtual void stir() = 0;
+    size_t keySize() const;
+    size_t ivSize() const;
+    size_t tagSize() const;
 
-    virtual void added();
+    bool setKey(const uint8_t *key, size_t len);
+    bool setIV(const uint8_t *iv, size_t len);
 
-protected:
-    virtual void output(const uint8_t *data, size_t len, unsigned int credit);
+    void encrypt(uint8_t *output, const uint8_t *input, size_t len);
+    void decrypt(uint8_t *output, const uint8_t *input, size_t len);
+
+    void addAuthData(const void *data, size_t len);
+
+    void computeTag(void *tag, size_t len);
+    bool checkTag(const void *tag, size_t len);
+
+    void clear();
+
+private:
+    struct {
+        uint64_t K[2];
+        uint64_t S[5];
+    } state;
+    uint8_t posn;
+    uint8_t authMode;
+
+    void permute(uint8_t first);
+    void endAuth();
 };
 

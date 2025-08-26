@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Southern Storm Software, Pty Ltd.
+ * Copyright (C) 2016 Southern Storm Software, Pty Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -22,55 +22,21 @@
 
 #pragma once
 
-#include <inttypes.h>
-#include <stddef.h>
+#include "Core_SpeckTiny.h"
 
-class Core_NoiseSource;
-
-class Core_RNGClass
+class Core_SpeckSmall : public Core_SpeckTiny
 {
 public:
-    Core_RNGClass();
-    ~Core_RNGClass();
+    Core_SpeckSmall();
+    virtual ~Core_SpeckSmall();
 
-    void begin(const char *tag);
-    void addNoiseSource(Core_NoiseSource &source);
+    bool setKey(const uint8_t *key, size_t len);
 
-    void setAutoSaveTime(uint16_t minutes);
+    void decryptBlock(uint8_t *output, const uint8_t *input);
 
-    void rand(uint8_t *data, size_t len);
-    bool available(size_t len) const;
-
-    void stir(const uint8_t *data, size_t len, unsigned int credit = 0);
-
-    void save();
-
-    void loop();
-
-    void destroy();
-
-    static const int SEED_SIZE = 48;
+    void clear();
 
 private:
-    uint32_t block[16];
-    uint32_t stream[16];
-    uint16_t credits : 13;
-    uint16_t firstSave : 1;
-    uint16_t initialized : 1;
-    uint16_t trngPending : 1;
-    unsigned long timer;
-    unsigned long timeout;
-    Core_NoiseSource *noiseSources[4];
-    uint8_t count;
-    uint8_t trngPosn;
-
-    void rekey();
-    void mixTRNG();
+    uint64_t l[4];
 };
-
-/* the STM32 tolkit defines its own RNG symbol, incompatible with the
-   Crypto library: https://github.com/stm32duino/Arduino_Core_STM32 */
-#ifndef RNG
-extern Core_RNGClass RNG;
-#endif
 
