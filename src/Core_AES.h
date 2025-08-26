@@ -226,13 +226,13 @@ private:
 #undef AES128
 #undef AES192
 #undef AES256
-#define AES128 AES128_ESP
-#define AES192 AES192_ESP
-#define AES256 AES256_ESP
+#define AES128 Core_AES128_ESP
+#define AES192 Core_AES192_ESP
+#define AES256 Core_AES256_ESP
 
 /** @endcond */
 
-class AESCommon : public BlockCipher
+class AESCommon : public Core_BlockCipher
 {
 public:
     virtual ~AESCommon();
@@ -283,10 +283,10 @@ public:
 
 
 // The ESP32 AES context is so small that it already qualifies as "tiny".
-typedef AES128 AESTiny128;
-typedef AES256 AESTiny256;
-typedef AES128 AESSmall128;
-typedef AES256 AESSmall256;
+typedef Core_AES128 Core_AESTiny128;
+typedef Core_AES256 Core_AESTiny256;
+typedef Core_AES128 Core_AESSmall128;
+typedef Core_AES256 Core_AESSmall256;
 
 #endif // CRYPTO_AES_ESP32
 

@@ -72,10 +72,10 @@ private:
 };
 
 template <typename T>
-class EAX : public EAXCommon
+class Core_EAX : public Core_EAXCommon
 {
 public:
-    EAX() { setBlockCipher(&cipher); }
+    Core_EAX() { setBlockCipher(&cipher); }
 
 private:
     T cipher;

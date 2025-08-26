@@ -52,7 +52,7 @@
 #define RNG_WATCHDOG 1      // Harvest entropy from watchdog jitter.
 #endif
 
-#define RNG_EEPROM_ADDRESS (E2END + 1 - RNGClass::SEED_SIZE)
+#define RNG_EEPROM_ADDRESS (E2END + 1 - Core_RNGClass::SEED_SIZE)
 #elif defined(ESP8266)
 // ESP8266 does not have EEPROM but it does have SPI flash memory.
 // It also has a TRNG register for generating "true" random numbers.
@@ -81,7 +81,7 @@
 #endif
 
 /**
- * \class RNGClass RNG.h <RNG.h>
+ * \class Core_RNGClass RNG.h <RNG.h>
  * \brief Pseudo random number generator suitable for cryptography.
  *
  * Random number generators must be seeded properly before they can
@@ -171,14 +171,14 @@
 /**
  * \brief Global random number generator instance.
  *
- * \sa RNGClass
+ * \sa Core_RNGClass
  */
 #ifndef RNG
-RNGClass RNG;
+Core_RNGClass RNG;
 #endif
 
 /**
- * \var RNGClass::SEED_SIZE
+ * \var Core_RNGClass::SEED_SIZE
  * \brief Size of a saved random number seed in EEPROM space.
  *
  * The seed is saved into the last SEED_SIZE bytes of EEPROM memory.
@@ -243,7 +243,7 @@ static uint32_t volatile hash = 0;
 static uint8_t volatile outBits = 0;
 
 // Watchdog interrupt handler.  This fires off every 16ms.  We collect
-// 32 bits and then pass them off onto RNGClass::loop().
+// 32 bits and then pass them off onto Core_RNGClass::loop().
 ISR(WDT_vect)
 {
     // Read the low byte of Timer 1.  We assume that the timer was
@@ -310,7 +310,7 @@ ISR(RTC_CNT_vect)
  *
  * \sa begin()
  */
-RNGClass::RNGClass()
+Core_RNGClass::Core_RNGClass()
     : credits(0)
     , firstSave(1)
     , initialized(0)
@@ -325,7 +325,7 @@ RNGClass::RNGClass()
 /**
  * \brief Destroys this random number generator instance.
  */
-RNGClass::~RNGClass()
+Core_RNGClass::~Core_RNGClass()
 {
 #if defined(RNG_DUE_TRNG)
     // Disable the TRNG in the Arduino Due.
@@ -437,7 +437,7 @@ static void eraseAndWriteSeed()
  *
  * \sa addNoiseSource(), stir(), save()
  */
-void RNGClass::begin(const char *tag)
+void Core_RNGClass::begin(const char *tag)
 {
     // Bail out if we have already done this.
     if (initialized)
@@ -610,7 +610,7 @@ void RNGClass::begin(const char *tag)
  *
  * \sa loop(), begin()
  */
-void RNGClass::addNoiseSource(NoiseSource &source)
+void Core_RNGClass::addNoiseSource(NoiseSource &source)
 {
     #define MAX_NOISE_SOURCES (sizeof(noiseSources) / sizeof(noiseSources[0]))
     if (count < MAX_NOISE_SOURCES) {
@@ -635,7 +635,7 @@ void RNGClass::addNoiseSource(NoiseSource &source)
  *
  * \sa save(), stir()
  */
-void RNGClass::setAutoSaveTime(uint16_t minutes)
+void Core_RNGClass::setAutoSaveTime(uint16_t minutes)
 {
     if (!minutes)
         minutes = 1; // Just in case.
@@ -659,7 +659,7 @@ void RNGClass::setAutoSaveTime(uint16_t minutes)
  *
  * \sa available(), stir()
  */
-void RNGClass::rand(uint8_t *data, size_t len)
+void Core_RNGClass::rand(uint8_t *data, size_t len)
 {
     // Make sure that the RNG is initialized in case the application
     // forgot to call RNG.begin() at startup time.
@@ -753,7 +753,7 @@ void RNGClass::rand(uint8_t *data, size_t len)
  *
  * \sa rand()
  */
-bool RNGClass::available(size_t len) const
+bool Core_RNGClass::available(size_t len) const
 {
     if (len >= (RNG_MAX_CREDITS / 8))
         return credits >= RNG_MAX_CREDITS;
@@ -786,7 +786,7 @@ bool RNGClass::available(size_t len) const
  *
  * \sa loop()
  */
-void RNGClass::stir(const uint8_t *data, size_t len, unsigned int credit)
+void Core_RNGClass::stir(const uint8_t *data, size_t len, unsigned int credit)
 {
     // Increase the entropy credit.
     if ((credit / 8) >= len && len)
@@ -855,7 +855,7 @@ void RNGClass::stir(const uint8_t *data, size_t len, unsigned int credit)
  *
  * \sa loop(), stir()
  */
-void RNGClass::save()
+void Core_RNGClass::save()
 {
     // Generate random data from the current state and save
     // that as the seed.  Then force a rekey.
@@ -897,7 +897,7 @@ void RNGClass::save()
  * This function must be called on a regular basis from the application's
  * main "loop()" function.
  */
-void RNGClass::loop()
+void Core_RNGClass::loop()
 {
     // Stir in the entropy from all registered noise sources.
     for (uint8_t posn = 0; posn < count; ++posn)
@@ -1034,7 +1034,7 @@ void RNGClass::loop()
  *
  * \sa begin()
  */
-void RNGClass::destroy()
+void Core_RNGClass::destroy()
 {
     clean(block);
     clean(stream);
@@ -1060,7 +1060,7 @@ void RNGClass::destroy()
 /**
  * \brief Rekeys the random number generator.
  */
-void RNGClass::rekey()
+void Core_RNGClass::rekey()
 {
     // Rekey the cipher for the next request by generating a new block.
     // This is intended to make it difficult to wind the random number
@@ -1081,7 +1081,7 @@ void RNGClass::rekey()
 /**
  * \brief Mix in fresh data from the TRNG when rand() is called.
  */
-void RNGClass::mixTRNG()
+void Core_RNGClass::mixTRNG()
 {
 #if defined(RNG_DUE_TRNG)
     // Mix in 12 words from the Due's TRNG.

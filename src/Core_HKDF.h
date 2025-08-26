@@ -67,7 +67,7 @@ template <typename T> void hkdf
     (void *out, size_t outLen, const void *key, size_t keyLen,
      const void *salt, size_t saltLen, const void *info, size_t infoLen)
 {
-    HKDF<T> context;
+    Core_HKDF<T> context;
     context.setKey(key, keyLen, salt, saltLen);
     context.extract(out, outLen, info, infoLen);
 }

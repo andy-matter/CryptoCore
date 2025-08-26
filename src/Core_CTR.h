@@ -56,10 +56,10 @@ private:
 };
 
 template <typename T>
-class CTR : public CTRCommon
+class Core_CTR : public Core_CTRCommon
 {
 public:
-    CTR() { setBlockCipher(&cipher); }
+    Core_CTR() { setBlockCipher(&cipher); }
 
 private:
     T cipher;
