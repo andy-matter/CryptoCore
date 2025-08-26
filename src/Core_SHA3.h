@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_SHA3_h
-#define CRYPTO_SHA3_h
+#pragma once
 
 #include "Core_KeccakCore.h"
 #include "Core_Hash.h"
 
-class SHA3_256 : public Hash
+class Core_SHA3_256 : public Core_Hash
 {
 public:
-    SHA3_256();
-    virtual ~SHA3_256();
+    Core_SHA3_256();
+    virtual ~Core_SHA3_256();
 
     size_t hashSize() const;
     size_t blockSize() const;
@@ -48,14 +47,14 @@ public:
     static const size_t BLOCK_SIZE = 136;
 
 private:
-    KeccakCore core;
+    Core_KeccakCore core;
 };
 
-class SHA3_512 : public Hash
+class Core_SHA3_512 : public Core_Hash
 {
 public:
-    SHA3_512();
-    virtual ~SHA3_512();
+    Core_SHA3_512();
+    virtual ~Core_SHA3_512();
 
     size_t hashSize() const;
     size_t blockSize() const;
@@ -73,7 +72,6 @@ public:
     static const size_t BLOCK_SIZE = 72;
 
 private:
-    KeccakCore core;
+    Core_KeccakCore core;
 };
 
-#endif

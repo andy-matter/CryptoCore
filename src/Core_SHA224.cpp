@@ -45,17 +45,17 @@
 /**
  * \brief Constructs a SHA-224 hash object.
  */
-SHA224::SHA224()
+Core_SHA224::Core_SHA224()
 {
     reset();
 }
 
-size_t SHA224::hashSize() const
+size_t Core_SHA224::hashSize() const
 {
     return 28;
 }
 
-void SHA224::reset()
+void Core_SHA224::reset()
 {
     state.h[0] = 0xc1059ed8;
     state.h[1] = 0x367cd507;

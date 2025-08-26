@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_GF128_h
-#define CRYPTO_GF128_h
+#pragma once
 
 #include <inttypes.h>
 
-class GF128
+class Core_GF128
 {
 private:
-    GF128() {}
-    ~GF128() {}
+    Core_GF128() {}
+    ~Core_GF128() {}
 
 public:
     static void mulInit(uint32_t H[4], const void *key);
@@ -39,4 +38,3 @@ public:
     static void dblXTS(uint32_t V[4]);
 };
 
-#endif

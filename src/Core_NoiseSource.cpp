@@ -33,14 +33,14 @@
 /**
  * \brief Constructs a new random noise source.
  */
-NoiseSource::NoiseSource()
+Core_NoiseSource::Core_NoiseSource()
 {
 }
 
 /**
  * \brief Destroys this random noise source.
  */
-NoiseSource::~NoiseSource()
+Core_NoiseSource::~Core_NoiseSource()
 {
 }
 
@@ -92,7 +92,7 @@ NoiseSource::~NoiseSource()
  * For example, if the noise source has a unique identifier or serial
  * number then this function can stir it into the pool at startup time.
  */
-void NoiseSource::added()
+void Core_NoiseSource::added()
 {
     // Nothing to do here.
 }
@@ -114,7 +114,7 @@ void NoiseSource::added()
  * output from the noise source before it is mixed into the pool to
  * allow the raw data to be analyzed for randomness.
  */
-void NoiseSource::output(const uint8_t *data, size_t len, unsigned int credit)
+void Core_NoiseSource::output(const uint8_t *data, size_t len, unsigned int credit)
 {
     RNG.stir(data, len, credit);
 }

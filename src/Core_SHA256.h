@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_SHA256_h
-#define CRYPTO_SHA256_h
+#pragma once
 
 #include "Core_Hash.h"
 
-class SHA256 : public Hash
+class Core_SHA256 : public Core_Hash
 {
 public:
-    SHA256();
-    virtual ~SHA256();
+    Core_SHA256();
+    virtual ~Core_SHA256();
 
     size_t hashSize() const;
     size_t blockSize() const;
@@ -57,4 +56,3 @@ protected:
     void processChunk();
 };
 
-#endif

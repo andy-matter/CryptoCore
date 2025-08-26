@@ -44,25 +44,25 @@
  *
  * \param numRounds Number of encryption rounds to use; usually 8, 12, or 20.
  */
-ChaCha::ChaCha(uint8_t numRounds)
+Core_ChaCha::Core_ChaCha(uint8_t numRounds)
     : rounds(numRounds)
     , posn(64)
 {
 }
 
-ChaCha::~ChaCha()
+Core_ChaCha::~Core_ChaCha()
 {
     clean(block);
     clean(stream);
 }
 
-size_t ChaCha::keySize() const
+size_t Core_ChaCha::keySize() const
 {
     // Default key size is 256-bit, but any key size is allowed.
     return 32;
 }
 
-size_t ChaCha::ivSize() const
+size_t Core_ChaCha::ivSize() const
 {
     // We return 8 but we also support 12-byte nonces in setIV().
     return 8;
@@ -84,7 +84,7 @@ size_t ChaCha::ivSize() const
  * \sa numRounds()
  */
 
-bool ChaCha::setKey(const uint8_t *key, size_t len)
+bool Core_ChaCha::setKey(const uint8_t *key, size_t len)
 {
     static const char tag128[] PROGMEM = "expand 16-byte k";
     static const char tag256[] PROGMEM = "expand 32-byte k";
@@ -108,7 +108,7 @@ bool ChaCha::setKey(const uint8_t *key, size_t len)
     return true;
 }
 
-bool ChaCha::setIV(const uint8_t *iv, size_t len)
+bool Core_ChaCha::setIV(const uint8_t *iv, size_t len)
 {
     // From draft-nir-cfrg-chacha20-poly1305-10.txt, we can use either
     // 64-bit or 96-bit nonces.  The 96-bit nonce consists of the high
@@ -142,7 +142,7 @@ bool ChaCha::setIV(const uint8_t *iv, size_t len)
  *
  * \sa setIV()
  */
-bool ChaCha::setCounter(const uint8_t *counter, size_t len)
+bool Core_ChaCha::setCounter(const uint8_t *counter, size_t len)
 {
     // Normally both the IV and the counter are 8 bytes in length.
     // However, if the IV was 12 bytes, then a 4 byte counter can be used.
@@ -155,7 +155,7 @@ bool ChaCha::setCounter(const uint8_t *counter, size_t len)
     }
 }
 
-void ChaCha::encrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_ChaCha::encrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     while (len > 0) {
         if (posn >= 64) {
@@ -187,7 +187,7 @@ void ChaCha::encrypt(uint8_t *output, const uint8_t *input, size_t len)
     }
 }
 
-void ChaCha::decrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_ChaCha::decrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     encrypt(output, input, len);
 }
@@ -204,7 +204,7 @@ void ChaCha::decrypt(uint8_t *output, const uint8_t *input, size_t len)
  *
  * \sa encrypt()
  */
-void ChaCha::keystreamBlock(uint32_t *output)
+void Core_ChaCha::keystreamBlock(uint32_t *output)
 {
     // Generate the hash output directly into the caller-supplied buffer.
     hashCore(output, (const uint32_t *)block, rounds);
@@ -215,7 +215,7 @@ void ChaCha::keystreamBlock(uint32_t *output)
     block[48] = 1;
 }
 
-void ChaCha::clear()
+void Core_ChaCha::clear()
 {
     clean(block);
     clean(stream);
@@ -250,7 +250,7 @@ void ChaCha::clear()
  * access to the ChaCha hash core without the higher-level processing that
  * turns the core into a stream cipher.
  */
-void ChaCha::hashCore(uint32_t *output, const uint32_t *input, uint8_t rounds)
+void Core_ChaCha::hashCore(uint32_t *output, const uint32_t *input, uint8_t rounds)
 {
     uint8_t posn;
 

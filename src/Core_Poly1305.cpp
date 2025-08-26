@@ -89,7 +89,7 @@
 /**
  * \brief Constructs a new Poly1305 message authenticator.
  */
-Poly1305::Poly1305()
+Core_Poly1305::Core_Poly1305()
 {
     state.chunkSize = 0;
 }
@@ -98,7 +98,7 @@ Poly1305::Poly1305()
  * \brief Destroys this Poly1305 message authenticator after clearing all
  * sensitive information.
  */
-Poly1305::~Poly1305()
+Core_Poly1305::~Core_Poly1305()
 {
     clean(state);
 }
@@ -110,7 +110,7 @@ Poly1305::~Poly1305()
  *
  * \sa update(), finalize()
  */
-void Poly1305::reset(const void *key)
+void Core_Poly1305::reset(const void *key)
 {
     // Copy the key into place and clear the bits we don't need.
     uint8_t *r = (uint8_t *)state.r;
@@ -142,7 +142,7 @@ void Poly1305::reset(const void *key)
  *
  * \sa pad(), reset(), finalize()
  */
-void Poly1305::update(const void *data, size_t len)
+void Core_Poly1305::update(const void *data, size_t len)
 {
     // Break the input up into 128-bit chunks and process each in turn.
     const uint8_t *d = (const uint8_t *)data;
@@ -179,7 +179,7 @@ void Poly1305::update(const void *data, size_t len)
  *
  * \sa reset(), update()
  */
-void Poly1305::finalize(const void *nonce, void *token, size_t len)
+void Core_Poly1305::finalize(const void *nonce, void *token, size_t len)
 {
     dlimb_t carry;
     uint8_t i;
@@ -251,7 +251,7 @@ void Poly1305::finalize(const void *nonce, void *token, size_t len)
  *
  * \sa update()
  */
-void Poly1305::pad()
+void Core_Poly1305::pad()
 {
     if (state.chunkSize != 0) {
         memset(((uint8_t *)state.c) + state.chunkSize, 0, 16 - state.chunkSize);
@@ -265,7 +265,7 @@ void Poly1305::pad()
 /**
  * \brief Clears the authenticator's state, removing all sensitive data.
  */
-void Poly1305::clear()
+void Core_Poly1305::clear()
 {
     clean(state);
 }
@@ -273,7 +273,7 @@ void Poly1305::clear()
 /**
  * \brief Processes a single 128-bit chunk of input data.
  */
-void Poly1305::processChunk()
+void Core_Poly1305::processChunk()
 {
     limb_t t[NUM_LIMBS_256BIT + 1];
 

@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_BLOCKCIPHER_h
-#define CRYPTO_BLOCKCIPHER_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class BlockCipher
+class Core_BlockCipher
 {
 public:
-    BlockCipher();
-    virtual ~BlockCipher();
+    Core_BlockCipher();
+    virtual ~Core_BlockCipher();
 
     virtual size_t blockSize() const = 0;
     virtual size_t keySize() const = 0;
@@ -43,4 +42,3 @@ public:
     virtual void clear() = 0;
 };
 
-#endif

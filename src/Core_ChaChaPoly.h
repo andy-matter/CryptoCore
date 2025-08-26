@@ -20,18 +20,17 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_CHACHAPOLY_H
-#define CRYPTO_CHACHAPOLY_H
+#pragma once
 
 #include "Core_AuthenticatedCipher.h"
 #include "Core_ChaCha.h"
 #include "Core_Poly1305.h"
 
-class ChaChaPoly : public AuthenticatedCipher
+class Core_ChaChaPoly : public Core_AuthenticatedCipher
 {
 public:
-    ChaChaPoly();
-    virtual ~ChaChaPoly();
+    Core_ChaChaPoly();
+    virtual ~Core_ChaChaPoly();
 
     size_t keySize() const;
     size_t ivSize() const;
@@ -51,8 +50,8 @@ public:
     void clear();
 
 private:
-    ChaCha chacha;
-    Poly1305 poly1305;
+    Core_ChaCha chacha;
+    Core_Poly1305 poly1305;
     struct {
         uint8_t nonce[16];
         uint64_t authSize;
@@ -62,4 +61,3 @@ private:
     } state;
 };
 
-#endif

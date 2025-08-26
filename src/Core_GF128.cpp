@@ -55,7 +55,7 @@
  *
  * \sa mul(), dbl()
  */
-void GF128::mulInit(uint32_t H[4], const void *key)
+void Core_GF128::mulInit(uint32_t H[4], const void *key)
 {
 #if defined(__AVR__)
     // Copy the key into H but leave it in big endian order because
@@ -87,7 +87,7 @@ void GF128::mulInit(uint32_t H[4], const void *key)
  *
  * \sa mulInit(), dbl()
  */
-void GF128::mul(uint32_t Y[4], const uint32_t H[4])
+void Core_GF128::mul(uint32_t Y[4], const uint32_t H[4])
 {
 #if defined(__AVR__)
     uint32_t Z[4] = {0, 0, 0, 0};   // Z = 0
@@ -311,7 +311,7 @@ void GF128::mul(uint32_t Y[4], const uint32_t H[4])
  *
  * \sa dblEAX(), dblXTS(), mul()
  */
-void GF128::dbl(uint32_t V[4])
+void Core_GF128::dbl(uint32_t V[4])
 {
 #if defined(__AVR__)
     __asm__ __volatile__ (
@@ -403,7 +403,7 @@ void GF128::dbl(uint32_t V[4])
  *
  * \sa dbl(), dblXTS(), mul()
  */
-void GF128::dblEAX(uint32_t V[4])
+void Core_GF128::dblEAX(uint32_t V[4])
 {
 #if defined(__AVR__)
     __asm__ __volatile__ (
@@ -494,7 +494,7 @@ void GF128::dblEAX(uint32_t V[4])
  *
  * \sa dbl(), dblEAX(), mul()
  */
-void GF128::dblXTS(uint32_t V[4])
+void Core_GF128::dblXTS(uint32_t V[4])
 {
 #if defined(__AVR__)
     __asm__ __volatile__ (

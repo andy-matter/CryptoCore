@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_AUTHENTICATEDCIPHER_h
-#define CRYPTO_AUTHENTICATEDCIPHER_h
+#pragma once
 
 #include "Core_Cipher.h"
 
-class AuthenticatedCipher : public Cipher
+class Core_AuthenticatedCipher : public Core_Cipher
 {
 public:
-    AuthenticatedCipher();
-    virtual ~AuthenticatedCipher();
+    Core_AuthenticatedCipher();
+    virtual ~Core_AuthenticatedCipher();
 
     virtual size_t tagSize() const = 0;
 
@@ -39,4 +38,3 @@ public:
     virtual bool checkTag(const void *tag, size_t len) = 0;
 };
 
-#endif

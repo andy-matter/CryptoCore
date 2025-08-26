@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_GHASH_h
-#define CRYPTO_GHASH_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class GHASH
+class Core_GHASH
 {
 public:
-    GHASH();
-    ~GHASH();
+    Core_GHASH();
+    ~Core_GHASH();
 
     void reset(const void *key);
     void update(const void *data, size_t len);
@@ -48,4 +47,3 @@ private:
     } state;
 };
 
-#endif

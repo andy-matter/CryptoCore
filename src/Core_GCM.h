@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_GCM_h
-#define CRYPTO_GCM_h
+#pragma once
 
 #include "Core_AuthenticatedCipher.h"
 #include "Core_BlockCipher.h"
 #include "Core_GHASH.h"
 
-class GCMCommon : public AuthenticatedCipher
+class Core_GCMCommon : public Core_AuthenticatedCipher
 {
 public:
-    virtual ~GCMCommon();
+    virtual ~Core_GCMCommon();
 
     size_t keySize() const;
     size_t ivSize() const;
@@ -50,12 +49,12 @@ public:
     void clear();
 
 protected:
-    GCMCommon();
-    void setBlockCipher(BlockCipher *cipher) { blockCipher = cipher; }
+    Core_GCMCommon();
+    void setBlockCipher(Core_BlockCipher *cipher) { blockCipher = cipher; }
 
 private:
-    BlockCipher *blockCipher;
-    GHASH ghash;
+    Core_BlockCipher *blockCipher;
+    Core_GHASH ghash;
     struct {
         uint8_t counter[16];
         uint8_t stream[16];
@@ -68,13 +67,12 @@ private:
 };
 
 template <typename T>
-class GCM : public GCMCommon
+class Core_GCM : public Core_GCMCommon
 {
 public:
-    GCM() { setBlockCipher(&cipher); }
+    Core_GCM() { setBlockCipher(&cipher); }
 
 private:
     T cipher;
 };
 
-#endif

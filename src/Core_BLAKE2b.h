@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_BLAKE2B_H
-#define CRYPTO_BLAKE2B_H
+#pragma once
 
 #include "Core_Hash.h"
 
-class BLAKE2b : public Hash
+class Core_BLAKE2b : public Core_Hash
 {
 public:
-    BLAKE2b();
-    virtual ~BLAKE2b();
+    Core_BLAKE2b();
+    virtual ~Core_BLAKE2b();
 
     size_t hashSize() const;
     size_t blockSize() const;
@@ -61,4 +60,3 @@ private:
     void processChunk(uint64_t f0);
 };
 
-#endif

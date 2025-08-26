@@ -20,14 +20,13 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_CURVE25519_h
-#define CRYPTO_CURVE25519_h
+#pragma once
 
 #include "Core_BigNumberUtil.h"
 
-class Ed25519;
+class Core_Ed25519;
 
-class Curve25519
+class Core_Curve25519
 {
 public:
     static bool eval(uint8_t result[32], const uint8_t s[32], const uint8_t x[32]);
@@ -68,10 +67,9 @@ private:
     static bool sqrt(limb_t *result, const limb_t *x);
 
     // Constructor and destructor are private - cannot instantiate this class.
-    Curve25519() {}
-    ~Curve25519() {}
+    Core_Curve25519() {}
+    ~Core_Curve25519() {}
 
-    friend class Ed25519;
+    friend class Core_Ed25519;
 };
 
-#endif

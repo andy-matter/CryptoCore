@@ -38,7 +38,7 @@
 /**
  * \brief Constructs an XTS object with a default sector size of 512 bytes.
  */
-XTSCommon::XTSCommon()
+Core_XTSCommon::Core_XTSCommon()
     : sectSize(512)
 {
 }
@@ -46,7 +46,7 @@ XTSCommon::XTSCommon()
 /**
  * \brief Clears all sensitive information and destroys this object.
  */
-XTSCommon::~XTSCommon()
+Core_XTSCommon::~Core_XTSCommon()
 {
     clean(twk);
 }
@@ -59,7 +59,7 @@ XTSCommon::~XTSCommon()
  *
  * \sa setKey(), tweakSize()
  */
-size_t XTSCommon::keySize() const
+size_t Core_XTSCommon::keySize() const
 {
     return blockCipher1->keySize() * 2;
 }
@@ -70,7 +70,7 @@ size_t XTSCommon::keySize() const
  * This function returns 16, which indicates that any tweak up to 16 bytes
  * in size can be specified via setTweak().
  */
-size_t XTSCommon::tweakSize() const
+size_t Core_XTSCommon::tweakSize() const
 {
     return 16;
 }
@@ -94,7 +94,7 @@ size_t XTSCommon::tweakSize() const
  *
  * \sa sectorSize(), encryptSector()
  */
-bool XTSCommon::setSectorSize(size_t size)
+bool Core_XTSCommon::setSectorSize(size_t size)
 {
     if (size < 16)
         return false;
@@ -116,7 +116,7 @@ bool XTSCommon::setSectorSize(size_t size)
  *
  * \sa keySize(), setTweak(), encryptSector()
  */
-bool XTSCommon::setKey(const uint8_t *key, size_t len)
+bool Core_XTSCommon::setKey(const uint8_t *key, size_t len)
 {
     if (!blockCipher1->setKey(key, len / 2))
         return false;
@@ -139,7 +139,7 @@ bool XTSCommon::setKey(const uint8_t *key, size_t len)
  *
  * \sa tweakSize(), setKey(), encryptSector()
  */
-bool XTSCommon::setTweak(const uint8_t *tweak, size_t len)
+bool Core_XTSCommon::setTweak(const uint8_t *tweak, size_t len)
 {
     if (len > 16)
         return false;
@@ -167,7 +167,7 @@ bool XTSCommon::setTweak(const uint8_t *tweak, size_t len)
  *
  * \sa decryptSector(), setKey(), setTweak()
  */
-void XTSCommon::encryptSector(uint8_t *output, const uint8_t *input)
+void Core_XTSCommon::encryptSector(uint8_t *output, const uint8_t *input)
 {
     size_t sectLast = sectSize & ~15;
     size_t posn = 0;
@@ -178,7 +178,7 @@ void XTSCommon::encryptSector(uint8_t *output, const uint8_t *input)
         xorTweak(output, input, t);
         blockCipher1->encryptBlock(output, output);
         xorTweak(output, output, t);
-        GF128::dblXTS(t);
+        Core_GF128::dblXTS(t);
         input += 16;
         output += 16;
         posn += 16;
@@ -212,7 +212,7 @@ void XTSCommon::encryptSector(uint8_t *output, const uint8_t *input)
  *
  * \sa encryptSector(), setKey(), setTweak()
  */
-void XTSCommon::decryptSector(uint8_t *output, const uint8_t *input)
+void Core_XTSCommon::decryptSector(uint8_t *output, const uint8_t *input)
 {
     size_t sectLast = sectSize & ~15;
     size_t posn = 0;
@@ -225,7 +225,7 @@ void XTSCommon::decryptSector(uint8_t *output, const uint8_t *input)
         xorTweak(output, input, t);
         blockCipher1->decryptBlock(output, output);
         xorTweak(output, output, t);
-        GF128::dblXTS(t);
+        Core_GF128::dblXTS(t);
         input += 16;
         output += 16;
         posn += 16;
@@ -240,7 +240,7 @@ void XTSCommon::decryptSector(uint8_t *output, const uint8_t *input)
         // dblXTS(t) as the tweak for this block.  Save the current
         // tweak in "u" for use later.
         memcpy(u, t, sizeof(t));
-        GF128::dblXTS(t);
+        Core_GF128::dblXTS(t);
         xorTweak(output, input, t);
         blockCipher1->decryptBlock(output, output);
         xorTweak(output, output, t);
@@ -263,7 +263,7 @@ void XTSCommon::decryptSector(uint8_t *output, const uint8_t *input)
 /**
  * \brief Clears all security-sensitive state from this XTS object.
  */
-void XTSCommon::clear()
+void Core_XTSCommon::clear()
 {
     clean(twk);
     blockCipher1->clear();
@@ -300,7 +300,7 @@ void XTSCommon::clear()
 /**
  * \brief Clears all sensitive information and destroys this object.
  */
-XTSSingleKeyCommon::~XTSSingleKeyCommon()
+Core_XTSSingleKeyCommon::~Core_XTSSingleKeyCommon()
 {
 }
 
@@ -312,7 +312,7 @@ XTSSingleKeyCommon::~XTSSingleKeyCommon()
  *
  * \sa setKey(), tweakSize()
  */
-size_t XTSSingleKeyCommon::keySize() const
+size_t Core_XTSSingleKeyCommon::keySize() const
 {
     return blockCipher1->keySize();
 }
@@ -331,7 +331,7 @@ size_t XTSSingleKeyCommon::keySize() const
  *
  * \sa keySize(), setTweak(), encryptSector()
  */
-bool XTSSingleKeyCommon::setKey(const uint8_t *key, size_t len)
+bool Core_XTSSingleKeyCommon::setKey(const uint8_t *key, size_t len)
 {
     return blockCipher1->setKey(key, len);
 }

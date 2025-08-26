@@ -41,7 +41,7 @@
  *
  * This constructor must be followed by a call to setBlockCipher().
  */
-GCMCommon::GCMCommon()
+Core_GCMCommon::Core_GCMCommon()
     : blockCipher(0)
 {
     state.authSize = 0;
@@ -53,34 +53,34 @@ GCMCommon::GCMCommon()
 /**
  * \brief Destroys this cipher object after clearing sensitive information.
  */
-GCMCommon::~GCMCommon()
+Core_GCMCommon::~Core_GCMCommon()
 {
     clean(state);
 }
 
-size_t GCMCommon::keySize() const
+size_t Core_GCMCommon::keySize() const
 {
     return blockCipher->keySize();
 }
 
-size_t GCMCommon::ivSize() const
+size_t Core_GCMCommon::ivSize() const
 {
     // The GCM specification recommends an IV size of 96 bits.
     return 12;
 }
 
-size_t GCMCommon::tagSize() const
+size_t Core_GCMCommon::tagSize() const
 {
     return 16;
 }
 
-bool GCMCommon::setKey(const uint8_t *key, size_t len)
+bool Core_GCMCommon::setKey(const uint8_t *key, size_t len)
 {
     // Set the encryption key for the block cipher.
     return blockCipher->setKey(key, len);
 }
 
-bool GCMCommon::setIV(const uint8_t *iv, size_t len)
+bool Core_GCMCommon::setIV(const uint8_t *iv, size_t len)
 {
     // Format the counter block from the IV.
     if (len == 12) {
@@ -139,7 +139,7 @@ static inline void increment(uint8_t counter[16])
     counter[12] = (uint8_t)carry;
 }
 
-void GCMCommon::encrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_GCMCommon::encrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     // Finalize the authenticated data if necessary.
     if (!state.dataStarted) {
@@ -176,7 +176,7 @@ void GCMCommon::encrypt(uint8_t *output, const uint8_t *input, size_t len)
     state.dataSize += len;
 }
 
-void GCMCommon::decrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_GCMCommon::decrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     // Finalize the authenticated data if necessary.
     if (!state.dataStarted) {
@@ -211,7 +211,7 @@ void GCMCommon::decrypt(uint8_t *output, const uint8_t *input, size_t len)
     }
 }
 
-void GCMCommon::addAuthData(const void *data, size_t len)
+void Core_GCMCommon::addAuthData(const void *data, size_t len)
 {
     if (!state.dataStarted) {
         ghash.update(data, len);
@@ -219,7 +219,7 @@ void GCMCommon::addAuthData(const void *data, size_t len)
     }
 }
 
-void GCMCommon::computeTag(void *tag, size_t len)
+void Core_GCMCommon::computeTag(void *tag, size_t len)
 {
     // Pad the hashed data and add the sizes.
     ghash.pad();
@@ -239,7 +239,7 @@ void GCMCommon::computeTag(void *tag, size_t len)
     memcpy(tag, state.stream, len);
 }
 
-bool GCMCommon::checkTag(const void *tag, size_t len)
+bool Core_GCMCommon::checkTag(const void *tag, size_t len)
 {
     // Can never match if the expected tag length is too long.
     if (len > 16)
@@ -250,7 +250,7 @@ bool GCMCommon::checkTag(const void *tag, size_t len)
     return secure_compare(state.counter, tag, len);
 }
 
-void GCMCommon::clear()
+void Core_GCMCommon::clear()
 {
     blockCipher->clear();
     ghash.clear();

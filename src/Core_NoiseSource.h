@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_NOISESOURCE_H
-#define CRYPTO_NOISESOURCE_H
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class NoiseSource
+class Core_NoiseSource
 {
 public:
-    NoiseSource();
-    virtual ~NoiseSource();
+    Core_NoiseSource();
+    virtual ~Core_NoiseSource();
 
     virtual bool calibrating() const = 0;
     virtual void stir() = 0;
@@ -41,4 +40,3 @@ protected:
     virtual void output(const uint8_t *data, size_t len, unsigned int credit);
 };
 
-#endif

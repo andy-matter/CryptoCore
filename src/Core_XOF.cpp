@@ -119,7 +119,7 @@
 /**
  * \brief Constructs a new XOF object.
  */
-XOF::XOF()
+Core_XOF::Core_XOF()
 {
 }
 
@@ -131,7 +131,7 @@ XOF::XOF()
  *
  * \sa clear()
  */
-XOF::~XOF()
+Core_XOF::~Core_XOF()
 {
 }
 

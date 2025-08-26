@@ -51,7 +51,7 @@
  * of much use to the caller.  The constructor should be followed by a
  * call to setCapacity() to select the capacity of interest.
  */
-KeccakCore::KeccakCore()
+Core_KeccakCore::Core_KeccakCore()
     : _blockSize(8)
 {
     memset(state.A, 0, sizeof(state.A));
@@ -63,7 +63,7 @@ KeccakCore::KeccakCore()
  * \brief Destroys this Keccak sponge function after clearing all
  * sensitive information.
  */
-KeccakCore::~KeccakCore()
+Core_KeccakCore::~Core_KeccakCore()
 {
     clean(state);
 }
@@ -73,7 +73,7 @@ KeccakCore::~KeccakCore()
  *
  * \sa setCapacity(), blockSize()
  */
-size_t KeccakCore::capacity() const
+size_t Core_KeccakCore::capacity() const
 {
     return 1600 - ((size_t)_blockSize) * 8;
 }
@@ -91,7 +91,7 @@ size_t KeccakCore::capacity() const
  *
  * \sa capacity(), blockSize()
  */
-void KeccakCore::setCapacity(size_t capacity)
+void Core_KeccakCore::setCapacity(size_t capacity)
 {
     _blockSize = (1600 - capacity) / 8;
     reset();
@@ -111,7 +111,7 @@ void KeccakCore::setCapacity(size_t capacity)
  *
  * \sa update(), extract()
  */
-void KeccakCore::reset()
+void Core_KeccakCore::reset()
 {
     memset(state.A, 0, sizeof(state.A));
     state.inputSize = 0;
@@ -130,7 +130,7 @@ void KeccakCore::reset()
  *
  * \sa pad(), extract(), reset()
  */
-void KeccakCore::update(const void *data, size_t size)
+void Core_KeccakCore::update(const void *data, size_t size)
 {
     // Stop generating output while we incorporate the new data.
     state.outputSize = 0;
@@ -164,7 +164,7 @@ void KeccakCore::update(const void *data, size_t size)
  *
  * \sa update(), extract()
  */
-void KeccakCore::pad(uint8_t tag)
+void Core_KeccakCore::pad(uint8_t tag)
 {
     // Padding for SHA3-NNN variants according to FIPS 202 appends "01",
     // then another "1", then many zero bits, followed by a final "1".
@@ -191,7 +191,7 @@ void KeccakCore::pad(uint8_t tag)
  *
  * \sa update(), reset(), encrypt()
  */
-void KeccakCore::extract(void *data, size_t size)
+void Core_KeccakCore::extract(void *data, size_t size)
 {
     // Stop accepting input while we are generating output.
     state.inputSize = 0;
@@ -237,7 +237,7 @@ void KeccakCore::extract(void *data, size_t size)
  *
  * \sa update(), reset(), extract()
  */
-void KeccakCore::encrypt(void *output, const void *input, size_t size)
+void Core_KeccakCore::encrypt(void *output, const void *input, size_t size)
 {
     // Stop accepting input while we are generating output.
     state.inputSize = 0;
@@ -272,7 +272,7 @@ void KeccakCore::encrypt(void *output, const void *input, size_t size)
 /**
  * \brief Clears all sensitive data from this object.
  */
-void KeccakCore::clear()
+void Core_KeccakCore::clear()
 {
     clean(state);
 }
@@ -290,7 +290,7 @@ void KeccakCore::clear()
  * Hash::finalizeHMAC() by directly formatting the HMAC key into the
  * internal block buffer and resetting the hash.
  */
-void KeccakCore::setHMACKey(const void *key, size_t len, uint8_t pad, size_t hashSize)
+void Core_KeccakCore::setHMACKey(const void *key, size_t len, uint8_t pad, size_t hashSize)
 {
     uint8_t *Abytes = (uint8_t *)state.A;
     size_t size = blockSize();
@@ -321,7 +321,7 @@ void KeccakCore::setHMACKey(const void *key, size_t len, uint8_t pad, size_t has
 /**
  * \brief Transform the state with the KECCAK-p sponge function with b = 1600.
  */
-void KeccakCore::keccakp()
+void Core_KeccakCore::keccakp()
 {
     uint64_t B[5][5];
 #if defined(__AVR__)

@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_CIPHER_h
-#define CRYPTO_CIPHER_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class Cipher
+class Core_Cipher
 {
 public:
-    Cipher();
-    virtual ~Cipher();
+    Core_Cipher();
+    virtual ~Core_Cipher();
 
     virtual size_t keySize() const = 0;
     virtual size_t ivSize() const = 0;
@@ -44,4 +43,3 @@ public:
     virtual void clear() = 0;
 };
 
-#endif

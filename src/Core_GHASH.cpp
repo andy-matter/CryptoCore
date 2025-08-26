@@ -44,7 +44,7 @@
 /**
  * \brief Constructs a new GHASH message authenticator.
  */
-GHASH::GHASH()
+Core_GHASH::Core_GHASH()
 {
     state.posn = 0;
 }
@@ -52,7 +52,7 @@ GHASH::GHASH()
 /**
  * \brief Destroys this GHASH message authenticator.
  */
-GHASH::~GHASH()
+Core_GHASH::~Core_GHASH()
 {
     clean(state);
 }
@@ -64,9 +64,9 @@ GHASH::~GHASH()
  *
  * \sa update(), finalize()
  */
-void GHASH::reset(const void *key)
+void Core_GHASH::reset(const void *key)
 {
-    GF128::mulInit(state.H, key);
+    Core_GF128::mulInit(state.H, key);
     memset(state.Y, 0, sizeof(state.Y));
     state.posn = 0;
 }
@@ -82,7 +82,7 @@ void GHASH::reset(const void *key)
  *
  * \sa pad(), reset(), finalize()
  */
-void GHASH::update(const void *data, size_t len)
+void Core_GHASH::update(const void *data, size_t len)
 {
     // XOR the input with state.Y in 128-bit chunks and process them.
     const uint8_t *d = (const uint8_t *)data;
@@ -97,7 +97,7 @@ void GHASH::update(const void *data, size_t len)
         len -= size;
         d += size;
         if (state.posn == 16) {
-            GF128::mul(state.Y, state.H);
+            Core_GF128::mul(state.Y, state.H);
             state.posn = 0;
         }
     }
@@ -118,7 +118,7 @@ void GHASH::update(const void *data, size_t len)
  *
  * \sa reset(), update()
  */
-void GHASH::finalize(void *token, size_t len)
+void Core_GHASH::finalize(void *token, size_t len)
 {
     // Pad with zeroes to a multiple of 16 bytes.
     pad();
@@ -134,12 +134,12 @@ void GHASH::finalize(void *token, size_t len)
  *
  * \sa update()
  */
-void GHASH::pad()
+void Core_GHASH::pad()
 {
     if (state.posn != 0) {
         // Padding involves XOR'ing the rest of state.Y with zeroes,
         // which does nothing.  Immediately process the next chunk.
-        GF128::mul(state.Y, state.H);
+        Core_GF128::mul(state.Y, state.H);
         state.posn = 0;
     }
 }
@@ -147,7 +147,7 @@ void GHASH::pad()
 /**
  * \brief Clears the authenticator's state, removing all sensitive data.
  */
-void GHASH::clear()
+void Core_GHASH::clear()
 {
     clean(state);
 }

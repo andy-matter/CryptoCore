@@ -38,7 +38,7 @@
 /**
  * \brief Constructs a new cipher object.
  */
-Cipher::Cipher()
+Core_Cipher::Core_Cipher()
 {
 }
 
@@ -50,7 +50,7 @@ Cipher::Cipher()
  *
  * \sa clear()
  */
-Cipher::~Cipher()
+Core_Cipher::~Core_Cipher()
 {
 }
 

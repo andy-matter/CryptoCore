@@ -20,19 +20,18 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_OMAC_H
-#define CRYPTO_OMAC_H
+#pragma once
 
 #include "Core_BlockCipher.h"
 
-class OMAC
+class Core_OMAC
 {
 public:
-    OMAC();
-    ~OMAC();
+    Core_OMAC();
+    ~Core_OMAC();
 
-    BlockCipher *blockCipher() const { return _blockCipher; }
-    void setBlockCipher(BlockCipher *cipher) { _blockCipher = cipher; }
+    Core_BlockCipher *blockCipher() const { return _blockCipher; }
+    void setBlockCipher(Core_BlockCipher *cipher) { _blockCipher = cipher; }
 
     void initFirst(uint8_t omac[16]);
     void initNext(uint8_t omac[16], uint8_t tag);
@@ -42,9 +41,8 @@ public:
     void clear();
 
 private:
-    BlockCipher *_blockCipher;
+    Core_BlockCipher *_blockCipher;
     uint32_t b[4];
     uint8_t posn;
 };
 
-#endif

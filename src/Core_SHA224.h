@@ -20,15 +20,14 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_SHA224_h
-#define CRYPTO_SHA224_h
+#pragma once
 
 #include "Core_SHA256.h"
 
-class SHA224 : public SHA256
+class Core_SHA224 : public Core_SHA256
 {
 public:
-    SHA224();
+    Core_SHA224();
 
     size_t hashSize() const;
 
@@ -37,4 +36,3 @@ public:
     static const size_t HASH_SIZE = 28;
 };
 
-#endif

@@ -49,7 +49,7 @@
 /**
  * \brief Constructs a SHA-512 hash object.
  */
-SHA512::SHA512()
+Core_SHA512::Core_SHA512()
 {
     reset();
 }
@@ -58,22 +58,22 @@ SHA512::SHA512()
  * \brief Destroys this SHA-512 hash object after clearing
  * sensitive information.
  */
-SHA512::~SHA512()
+Core_SHA512::~Core_SHA512()
 {
     clean(state);
 }
 
-size_t SHA512::hashSize() const
+size_t Core_SHA512::hashSize() const
 {
     return 64;
 }
 
-size_t SHA512::blockSize() const
+size_t Core_SHA512::blockSize() const
 {
     return 128;
 }
 
-void SHA512::reset()
+void Core_SHA512::reset()
 {
     static uint64_t const hashStart[8] PROGMEM = {
         0x6A09E667F3BCC908ULL, 0xBB67AE8584CAA73BULL, 0x3C6EF372FE94F82BULL,
@@ -86,7 +86,7 @@ void SHA512::reset()
     state.lengthHigh = 0;
 }
 
-void SHA512::update(const void *data, size_t len)
+void Core_SHA512::update(const void *data, size_t len)
 {
     // Update the total length in bits, not bytes.
     uint64_t temp = state.lengthLow;
@@ -112,7 +112,7 @@ void SHA512::update(const void *data, size_t len)
     }
 }
 
-void SHA512::finalize(void *hash, size_t len)
+void Core_SHA512::finalize(void *hash, size_t len)
 {
     // Pad the last chunk.  We may need two padding chunks if there
     // isn't enough room in the first for the padding and length.
@@ -144,20 +144,20 @@ void SHA512::finalize(void *hash, size_t len)
     memcpy(hash, state.w, len);
 }
 
-void SHA512::clear()
+void Core_SHA512::clear()
 {
     clean(state);
     reset();
 }
 
-void SHA512::resetHMAC(const void *key, size_t keyLen)
+void Core_SHA512::resetHMAC(const void *key, size_t keyLen)
 {
     formatHMACKey(state.w, key, keyLen, 0x36);
     state.lengthLow += 128 * 8;
     processChunk();
 }
 
-void SHA512::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
+void Core_SHA512::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
 {
     uint8_t temp[64];
     finalize(temp, sizeof(temp));
@@ -174,7 +174,7 @@ void SHA512::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t has
  *
  * Reference: http://en.wikipedia.org/wiki/SHA-2
  */
-void SHA512::processChunk()
+void Core_SHA512::processChunk()
 {
     // Round constants for SHA-512.
     static uint64_t const k[80] PROGMEM = {

@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_POLY1305_h
-#define CRYPTO_POLY1305_h
+#pragma once
 
 #include "Core_BigNumberUtil.h"
 #include <stddef.h>
 
-class Poly1305
+class Core_Poly1305
 {
 public:
-    Poly1305();
-    ~Poly1305();
+    Core_Poly1305();
+    ~Core_Poly1305();
 
     void reset(const void *key);
     void update(const void *data, size_t len);
@@ -51,4 +50,3 @@ private:
     void processChunk();
 };
 
-#endif

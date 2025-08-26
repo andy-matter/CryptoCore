@@ -45,7 +45,7 @@
 /**
  * \brief Constructs a new SHA3-256 hash object.
  */
-SHA3_256::SHA3_256()
+Core_SHA3_256::Core_SHA3_256()
 {
     core.setCapacity(512);
 }
@@ -53,49 +53,49 @@ SHA3_256::SHA3_256()
 /**
  * \brief Destroys this hash object after clearing sensitive information.
  */
-SHA3_256::~SHA3_256()
+Core_SHA3_256::~Core_SHA3_256()
 {
     // The destructor for the KeccakCore object will do most of the work.
 }
 
-size_t SHA3_256::hashSize() const
+size_t Core_SHA3_256::hashSize() const
 {
     return 32;
 }
 
-size_t SHA3_256::blockSize() const
+size_t Core_SHA3_256::blockSize() const
 {
     return core.blockSize();
 }
 
-void SHA3_256::reset()
+void Core_SHA3_256::reset()
 {
     core.reset();
 }
 
-void SHA3_256::update(const void *data, size_t len)
+void Core_SHA3_256::update(const void *data, size_t len)
 {
     core.update(data, len);
 }
 
-void SHA3_256::finalize(void *hash, size_t len)
+void Core_SHA3_256::finalize(void *hash, size_t len)
 {
     // Pad the final block and then extract the hash value.
     core.pad(0x06);
     core.extract(hash, len);
 }
 
-void SHA3_256::clear()
+void Core_SHA3_256::clear()
 {
     core.clear();
 }
 
-void SHA3_256::resetHMAC(const void *key, size_t keyLen)
+void Core_SHA3_256::resetHMAC(const void *key, size_t keyLen)
 {
     core.setHMACKey(key, keyLen, 0x36, 32);
 }
 
-void SHA3_256::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
+void Core_SHA3_256::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
 {
     uint8_t temp[32];
     finalize(temp, sizeof(temp));
@@ -127,7 +127,7 @@ void SHA3_256::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t h
 /**
  * \brief Constructs a new SHA3-512 hash object.
  */
-SHA3_512::SHA3_512()
+Core_SHA3_512::Core_SHA3_512()
 {
     core.setCapacity(1024);
 }
@@ -135,49 +135,49 @@ SHA3_512::SHA3_512()
 /**
  * \brief Destroys this hash object after clearing sensitive information.
  */
-SHA3_512::~SHA3_512()
+Core_SHA3_512::~Core_SHA3_512()
 {
     // The destructor for the KeccakCore object will do most of the work.
 }
 
-size_t SHA3_512::hashSize() const
+size_t Core_SHA3_512::hashSize() const
 {
     return 64;
 }
 
-size_t SHA3_512::blockSize() const
+size_t Core_SHA3_512::blockSize() const
 {
     return core.blockSize();
 }
 
-void SHA3_512::reset()
+void Core_SHA3_512::reset()
 {
     core.reset();
 }
 
-void SHA3_512::update(const void *data, size_t len)
+void Core_SHA3_512::update(const void *data, size_t len)
 {
     core.update(data, len);
 }
 
-void SHA3_512::finalize(void *hash, size_t len)
+void Core_SHA3_512::finalize(void *hash, size_t len)
 {
     // Pad the final block and then extract the hash value.
     core.pad(0x06);
     core.extract(hash, len);
 }
 
-void SHA3_512::clear()
+void Core_SHA3_512::clear()
 {
     core.clear();
 }
 
-void SHA3_512::resetHMAC(const void *key, size_t keyLen)
+void Core_SHA3_512::resetHMAC(const void *key, size_t keyLen)
 {
     core.setHMACKey(key, keyLen, 0x36, 64);
 }
 
-void SHA3_512::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
+void Core_SHA3_512::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
 {
     uint8_t temp[64];
     finalize(temp, sizeof(temp));

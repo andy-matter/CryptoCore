@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_CTR_h
-#define CRYPTO_CTR_h
+#pragma once
 
 #include "Core_Cipher.h"
 #include "Core_BlockCipher.h"
 
-class CTRCommon : public Cipher
+class Core_CTRCommon : public Core_Cipher
 {
 public:
-    virtual ~CTRCommon();
+    virtual ~Core_CTRCommon();
 
     size_t keySize() const;
     size_t ivSize() const;
@@ -45,11 +44,11 @@ public:
     void clear();
 
 protected:
-    CTRCommon();
-    void setBlockCipher(BlockCipher *cipher) { blockCipher = cipher; }
+    Core_CTRCommon();
+    void setBlockCipher(Core_BlockCipher *cipher) { blockCipher = cipher; }
 
 private:
-    BlockCipher *blockCipher;
+    Core_BlockCipher *blockCipher;
     uint8_t counter[16];
     uint8_t state[16];
     uint8_t posn;
@@ -66,4 +65,3 @@ private:
     T cipher;
 };
 
-#endif

@@ -20,18 +20,17 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_CHACHA_h
-#define CRYPTO_CHACHA_h
+#pragma once
 
 #include "Core_Cipher.h"
 
-class ChaChaPoly;
+class Core_ChaChaPoly;
 
-class ChaCha : public Cipher
+class Core_ChaCha : public Core_Cipher
 {
 public:
-    explicit ChaCha(uint8_t numRounds = 20);
-    virtual ~ChaCha();
+    explicit Core_ChaCha(uint8_t numRounds = 20);
+    virtual ~Core_ChaCha();
 
     size_t keySize() const;
     size_t ivSize() const;
@@ -58,7 +57,6 @@ private:
 
     void keystreamBlock(uint32_t *output);
 
-    friend class ChaChaPoly;
+    friend class Core_ChaChaPoly;
 };
 
-#endif

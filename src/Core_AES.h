@@ -20,8 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_AES_h
-#define CRYPTO_AES_h
+#pragma once
 
 #include "Core_BlockCipher.h"
 
@@ -34,12 +33,12 @@
 
 #if defined(CRYPTO_AES_DEFAULT) || defined(CRYPTO_DOC)
 
-class AESTiny128;
-class AESTiny256;
-class AESSmall128;
-class AESSmall256;
+class Core_AESTiny128;
+class Core_AESTiny256;
+class Core_AESSmall128;
+class Core_AESSmall256;
 
-class AESCommon : public BlockCipher
+class AESCommon : public Core_BlockCipher
 {
 public:
     virtual ~AESCommon();
@@ -66,17 +65,19 @@ protected:
     static void applySbox(uint8_t *output, const uint8_t *input);
     /** @endcond */
 
-    friend class AESTiny128;
-    friend class AESTiny256;
-    friend class AESSmall128;
-    friend class AESSmall256;
+    friend class Core_AESTiny128;
+    friend class Core_AESTiny256;
+    friend class Core_AESSmall128;
+    friend class Core_AESSmall256;
 };
 
-class AES128 : public AESCommon
+
+
+class Core_AES128 : public AESCommon
 {
 public:
-    AES128();
-    virtual ~AES128();
+    Core_AES128();
+    virtual ~Core_AES128();
 
     size_t keySize() const;
 
@@ -86,11 +87,13 @@ private:
     uint8_t sched[176];
 };
 
-class AES192 : public AESCommon
+
+
+class Core_AES192 : public AESCommon
 {
 public:
-    AES192();
-    virtual ~AES192();
+    Core_AES192();
+    virtual ~Core_AES192();
 
     size_t keySize() const;
 
@@ -100,11 +103,13 @@ private:
     uint8_t sched[208];
 };
 
-class AES256 : public AESCommon
+
+
+class Core_AES256 : public AESCommon
 {
 public:
-    AES256();
-    virtual ~AES256();
+    Core_AES256();
+    virtual ~Core_AES256();
 
     size_t keySize() const;
 
@@ -114,11 +119,13 @@ private:
     uint8_t sched[240];
 };
 
-class AESTiny256 : public BlockCipher
+
+
+class Core_AESTiny256 : public Core_BlockCipher
 {
 public:
-    AESTiny256();
-    virtual ~AESTiny256();
+    Core_AESTiny256();
+    virtual ~Core_AESTiny256();
 
     size_t blockSize() const;
     size_t keySize() const;
@@ -134,11 +141,13 @@ private:
     uint8_t schedule[32];
 };
 
-class AESSmall256 : public AESTiny256
+
+
+class Core_AESSmall256 : public Core_AESTiny256
 {
 public:
-    AESSmall256();
-    virtual ~AESSmall256();
+    Core_AESSmall256();
+    virtual ~Core_AESSmall256();
 
     bool setKey(const uint8_t *key, size_t len);
 
@@ -150,11 +159,13 @@ private:
     uint8_t reverse[32];
 };
 
-class AESTiny128 : public BlockCipher
+
+
+class Core_AESTiny128 : public Core_BlockCipher
 {
 public:
-    AESTiny128();
-    virtual ~AESTiny128();
+    Core_AESTiny128();
+    virtual ~Core_AESTiny128();
 
     size_t blockSize() const;
     size_t keySize() const;
@@ -170,11 +181,13 @@ private:
     uint8_t schedule[16];
 };
 
-class AESSmall128 : public AESTiny128
+
+
+class Core_AESSmall128 : public Core_AESTiny128
 {
 public:
-    AESSmall128();
-    virtual ~AESSmall128();
+    Core_AESSmall128();
+    virtual ~Core_AESSmall128();
 
     bool setKey(const uint8_t *key, size_t len);
 
@@ -187,6 +200,10 @@ private:
 };
 
 #endif // CRYPTO_AES_DEFAULT
+
+
+
+
 
 #if defined(CRYPTO_AES_ESP32)
 
@@ -237,26 +254,33 @@ private:
     uint8_t ctx[CRYPTO_ESP32_CONTEXT_SIZE];
 };
 
-class AES128 : public AESCommon
+
+
+class Core_AES128 : public AESCommon
 {
 public:
-    AES128() : AESCommon(16) {}
-    virtual ~AES128();
+    Core_AES128() : AESCommon(16) {}
+    virtual ~Core_AES128();
 };
 
-class AES192 : public AESCommon
+
+
+class Core_AES192 : public AESCommon
 {
 public:
-    AES192() : AESCommon(24) {}
-    virtual ~AES192();
+    Core_AES192() : AESCommon(24) {}
+    virtual ~Core_AES192();
 };
 
-class AES256 : public AESCommon
+
+
+class Core_AES256 : public AESCommon
 {
 public:
-    AES256() : AESCommon(32) {}
-    virtual ~AES256();
+    Core_AES256() : AESCommon(32) {}
+    virtual ~Core_AES256();
 };
+
 
 // The ESP32 AES context is so small that it already qualifies as "tiny".
 typedef AES128 AESTiny128;
@@ -266,4 +290,3 @@ typedef AES256 AESSmall256;
 
 #endif // CRYPTO_AES_ESP32
 
-#endif

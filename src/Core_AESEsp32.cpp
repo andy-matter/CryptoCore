@@ -84,15 +84,15 @@ void AESCommon::clear()
     ctx[0] = keySize;
 }
 
-AES128::~AES128()
+Core_AES128::~Core_AES128()
 {
 }
 
-AES192::~AES192()
+Core_AES192::~Core_AES192()
 {
 }
 
-AES256::~AES256()
+Core_AES256::~Core_AES256()
 {
 }
 

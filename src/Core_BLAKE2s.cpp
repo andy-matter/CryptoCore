@@ -82,7 +82,7 @@
 /**
  * \brief Constructs a BLAKE2s hash object.
  */
-BLAKE2s::BLAKE2s()
+Core_BLAKE2s::Core_BLAKE2s()
 {
     reset();
 }
@@ -91,17 +91,17 @@ BLAKE2s::BLAKE2s()
  * \brief Destroys this BLAKE2s hash object after clearing
  * sensitive information.
  */
-BLAKE2s::~BLAKE2s()
+Core_BLAKE2s::~Core_BLAKE2s()
 {
     clean(state);
 }
 
-size_t BLAKE2s::hashSize() const
+size_t Core_BLAKE2s::hashSize() const
 {
     return 32;
 }
 
-size_t BLAKE2s::blockSize() const
+size_t Core_BLAKE2s::blockSize() const
 {
     return 64;
 }
@@ -116,7 +116,7 @@ size_t BLAKE2s::blockSize() const
 #define BLAKE2s_IV6 0x1F83D9AB
 #define BLAKE2s_IV7 0x5BE0CD19
 
-void BLAKE2s::reset()
+void Core_BLAKE2s::reset()
 {
     state.h[0] = BLAKE2s_IV0 ^ 0x01010020; // Default output length of 32.
     state.h[1] = BLAKE2s_IV1;
@@ -137,7 +137,7 @@ void BLAKE2s::reset()
  * \param outputLength The output length to use for the final hash in bytes,
  * between 1 and 32.
  */
-void BLAKE2s::reset(uint8_t outputLength)
+void Core_BLAKE2s::reset(uint8_t outputLength)
 {
     if (outputLength < 1)
         outputLength = 1;
@@ -167,7 +167,7 @@ void BLAKE2s::reset(uint8_t outputLength)
  * If \a keyLen is greater than 32, then the \a key will be truncated to
  * the first 32 bytes.
  */
-void BLAKE2s::reset(const void *key, size_t keyLen, uint8_t outputLength)
+void Core_BLAKE2s::reset(const void *key, size_t keyLen, uint8_t outputLength)
 {
     if (keyLen > 32)
         keyLen = 32;
@@ -196,7 +196,7 @@ void BLAKE2s::reset(const void *key, size_t keyLen, uint8_t outputLength)
     }
 }
 
-void BLAKE2s::update(const void *data, size_t len)
+void Core_BLAKE2s::update(const void *data, size_t len)
 {
     // Break the input up into 512-bit chunks and process each in turn.
     const uint8_t *d = (const uint8_t *)data;
@@ -218,7 +218,7 @@ void BLAKE2s::update(const void *data, size_t len)
     }
 }
 
-void BLAKE2s::finalize(void *hash, size_t len)
+void Core_BLAKE2s::finalize(void *hash, size_t len)
 {
     // Pad the last chunk and hash it with f0 set to all-ones.
     memset(((uint8_t *)state.m) + state.chunkSize, 0, 64 - state.chunkSize);
@@ -234,20 +234,20 @@ void BLAKE2s::finalize(void *hash, size_t len)
     memcpy(hash, state.m, len);
 }
 
-void BLAKE2s::clear()
+void Core_BLAKE2s::clear()
 {
     clean(state);
     reset();
 }
 
-void BLAKE2s::resetHMAC(const void *key, size_t keyLen)
+void Core_BLAKE2s::resetHMAC(const void *key, size_t keyLen)
 {
     formatHMACKey(state.m, key, keyLen, 0x36);
     state.length += 64;
     state.chunkSize = 64;
 }
 
-void BLAKE2s::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
+void Core_BLAKE2s::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
 {
     uint8_t temp[32];
     finalize(temp, sizeof(temp));
@@ -289,7 +289,7 @@ static const uint8_t sigma[10][16] PROGMEM = {
         (c) = _c; \
     } while (0)
 
-void BLAKE2s::processChunk(uint32_t f0)
+void Core_BLAKE2s::processChunk(uint32_t f0)
 {
     uint8_t index;
     uint32_t v[16];

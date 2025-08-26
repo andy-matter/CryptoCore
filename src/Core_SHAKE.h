@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_SHAKE_h
-#define CRYPTO_SHAKE_h
+#pragma once
 
 #include "Core_XOF.h"
 #include "Core_KeccakCore.h"
 
-class SHAKE : public XOF
+class Core_SHAKE : public Core_XOF
 {
 public:
-    virtual ~SHAKE();
+    virtual ~Core_SHAKE();
 
     size_t blockSize() const;
 
@@ -42,25 +41,24 @@ public:
     void clear();
 
 protected:
-    SHAKE(size_t capacity);
+    Core_SHAKE(size_t capacity);
 
 private:
-    KeccakCore core;
+    Core_KeccakCore core;
     bool finalized;
 };
 
-class SHAKE128 : public SHAKE
+class Core_SHAKE128 : public Core_SHAKE
 {
 public:
-    SHAKE128() : SHAKE(256) {}
-    virtual ~SHAKE128();
+    Core_SHAKE128() : Core_SHAKE(256) {}
+    virtual ~Core_SHAKE128();
 };
 
-class SHAKE256 : public SHAKE
+class Core_SHAKE256 : public Core_SHAKE
 {
 public:
-    SHAKE256() : SHAKE(512) {}
-    virtual ~SHAKE256();
+    Core_SHAKE256() : Core_SHAKE(512) {}
+    virtual ~Core_SHAKE256();
 };
 
-#endif

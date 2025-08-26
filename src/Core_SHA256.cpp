@@ -49,7 +49,7 @@
 /**
  * \brief Constructs a SHA-256 hash object.
  */
-SHA256::SHA256()
+Core_SHA256::Core_SHA256()
 {
     reset();
 }
@@ -58,22 +58,22 @@ SHA256::SHA256()
  * \brief Destroys this SHA-256 hash object after clearing
  * sensitive information.
  */
-SHA256::~SHA256()
+Core_SHA256::~Core_SHA256()
 {
     clean(state);
 }
 
-size_t SHA256::hashSize() const
+size_t Core_SHA256::hashSize() const
 {
     return 32;
 }
 
-size_t SHA256::blockSize() const
+size_t Core_SHA256::blockSize() const
 {
     return 64;
 }
 
-void SHA256::reset()
+void Core_SHA256::reset()
 {
     state.h[0] = 0x6a09e667;
     state.h[1] = 0xbb67ae85;
@@ -87,7 +87,7 @@ void SHA256::reset()
     state.length = 0;
 }
 
-void SHA256::update(const void *data, size_t len)
+void Core_SHA256::update(const void *data, size_t len)
 {
     // Update the total length (in bits, not bytes).
     state.length += ((uint64_t)len) << 3;
@@ -109,7 +109,7 @@ void SHA256::update(const void *data, size_t len)
     }
 }
 
-void SHA256::finalize(void *hash, size_t len)
+void Core_SHA256::finalize(void *hash, size_t len)
 {
     // Pad the last chunk.  We may need two padding chunks if there
     // isn't enough room in the first for the padding and length.
@@ -141,20 +141,20 @@ void SHA256::finalize(void *hash, size_t len)
     memcpy(hash, state.w, len);
 }
 
-void SHA256::clear()
+void Core_SHA256::clear()
 {
     clean(state);
     reset();
 }
 
-void SHA256::resetHMAC(const void *key, size_t keyLen)
+void Core_SHA256::resetHMAC(const void *key, size_t keyLen)
 {
     formatHMACKey(state.w, key, keyLen, 0x36);
     state.length += 64 * 8;
     processChunk();
 }
 
-void SHA256::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
+void Core_SHA256::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
 {
     uint8_t temp[32];
     finalize(temp, sizeof(temp));
@@ -171,7 +171,7 @@ void SHA256::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t has
  *
  * Reference: http://en.wikipedia.org/wiki/SHA-2
  */
-void SHA256::processChunk()
+void Core_SHA256::processChunk()
 {
     // Round constants for SHA-256.
     static uint32_t const k[64] PROGMEM = {

@@ -20,16 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_HKDF_h
-#define CRYPTO_HKDF_h
+#pragma once
 
 #include "Core_Hash.h"
 #include "Core_Crypto.h"
 
-class HKDFCommon
+class Core_HKDFCommon
 {
 public:
-    virtual ~HKDFCommon();
+    virtual ~Core_HKDFCommon();
 
     void setKey(const void *key, size_t keyLen, const void *salt = 0, size_t saltLen = 0);
 
@@ -38,26 +37,26 @@ public:
     void clear();
 
 protected:
-    HKDFCommon();
-    void setHashAlgorithm(Hash *hashAlg, uint8_t *buffer)
+    Core_HKDFCommon();
+    void setHashAlgorithm(Core_Hash *hashAlg, uint8_t *buffer)
     {
         hash = hashAlg;
         buf = buffer;
     }
 
 private:
-    Hash *hash;
+    Core_Hash *hash;
     uint8_t *buf;
     uint8_t counter;
     uint8_t posn;
 };
 
 template <typename T>
-class HKDF : public HKDFCommon
+class Core_HKDF : public Core_HKDFCommon
 {
 public:
-    HKDF() { setHashAlgorithm(&hashAlg, buffer); }
-    ~HKDF() { ::clean(buffer, sizeof(buffer)); }
+    Core_HKDF() { setHashAlgorithm(&hashAlg, buffer); }
+    ~Core_HKDF() { ::clean(buffer, sizeof(buffer)); }
 
 private:
     T hashAlg;
@@ -73,4 +72,3 @@ template <typename T> void hkdf
     context.extract(out, outLen, info, infoLen);
 }
 
-#endif

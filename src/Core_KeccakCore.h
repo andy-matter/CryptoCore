@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_KECCAKCORE_H
-#define CRYPTO_KECCAKCORE_H
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class KeccakCore
+class Core_KeccakCore
 {
 public:
-    KeccakCore();
-    ~KeccakCore();
+    Core_KeccakCore();
+    ~Core_KeccakCore();
 
     size_t capacity() const;
     void setCapacity(size_t capacity);
@@ -60,4 +59,3 @@ private:
     void keccakp();
 };
 
-#endif

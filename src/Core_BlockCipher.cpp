@@ -37,7 +37,7 @@
 /**
  * \brief Constructs a block cipher.
  */
-BlockCipher::BlockCipher()
+Core_BlockCipher::Core_BlockCipher()
 {
 }
 
@@ -49,7 +49,7 @@ BlockCipher::BlockCipher()
  *
  * \sa clear()
  */
-BlockCipher::~BlockCipher()
+Core_BlockCipher::~Core_BlockCipher()
 {
 }
 

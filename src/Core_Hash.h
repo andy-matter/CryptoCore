@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_HASH_h
-#define CRYPTO_HASH_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class Hash
+class Core_Hash
 {
 public:
-    Hash();
-    virtual ~Hash();
+    Core_Hash();
+    virtual ~Core_Hash();
 
     virtual size_t hashSize() const = 0;
     virtual size_t blockSize() const = 0;
@@ -58,4 +57,3 @@ template <typename T> void hmac
     context.finalizeHMAC(key, keyLen, out, outLen);
 }
 
-#endif

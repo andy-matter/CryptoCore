@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_EAX_h
-#define CRYPTO_EAX_h
+#pragma once
 
 #include "Core_AuthenticatedCipher.h"
 #include "Core_BlockCipher.h"
 #include "Core_OMAC.h"
 
-class EAXCommon : public AuthenticatedCipher
+class Core_EAXCommon : public Core_AuthenticatedCipher
 {
 public:
-    virtual ~EAXCommon();
+    virtual ~Core_EAXCommon();
 
     size_t keySize() const;
     size_t ivSize() const;
@@ -50,8 +49,8 @@ public:
     void clear();
 
 protected:
-    EAXCommon();
-    void setBlockCipher(BlockCipher *cipher)
+    Core_EAXCommon();
+    void setBlockCipher(Core_BlockCipher *cipher)
     {
         omac.setBlockCipher(cipher);
     }
@@ -65,7 +64,7 @@ private:
         uint8_t encPosn;
         uint8_t authMode;
     } state;
-    OMAC omac;
+    Core_OMAC omac;
 
     void closeAuthData();
     void encryptCTR(uint8_t *output, const uint8_t *input, size_t len);
@@ -82,4 +81,3 @@ private:
     T cipher;
 };
 
-#endif

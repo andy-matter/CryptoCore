@@ -20,18 +20,17 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_SHA512_h
-#define CRYPTO_SHA512_h
+#pragma once
 
 #include "Core_Hash.h"
 
-class Ed25519;
+class Core_Ed25519;
 
-class SHA512 : public Hash
+class Core_SHA512 : public Core_Hash
 {
 public:
-    SHA512();
-    virtual ~SHA512();
+    Core_SHA512();
+    virtual ~Core_SHA512();
 
     size_t hashSize() const;
     size_t blockSize() const;
@@ -59,7 +58,6 @@ protected:
 
     void processChunk();
 
-    friend class Ed25519;
+    friend class Core_Ed25519;
 };
 
-#endif

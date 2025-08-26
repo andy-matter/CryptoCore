@@ -37,7 +37,7 @@
  * \param capacity The capacity of the Keccak sponge function in bits which
  * should be a multiple of 64 and between 64 and 1536.
  */
-SHAKE::SHAKE(size_t capacity)
+Core_SHAKE::Core_SHAKE(size_t capacity)
     : finalized(false)
 {
     core.setCapacity(capacity);
@@ -46,29 +46,29 @@ SHAKE::SHAKE(size_t capacity)
 /**
  * \brief Destroys this SHAKE object after clearing all sensitive information.
  */
-SHAKE::~SHAKE()
+Core_SHAKE::~Core_SHAKE()
 {
 }
 
-size_t SHAKE::blockSize() const
+size_t Core_SHAKE::blockSize() const
 {
     return core.blockSize();
 }
 
-void SHAKE::reset()
+void Core_SHAKE::reset()
 {
     core.reset();
     finalized = false;
 }
 
-void SHAKE::update(const void *data, size_t len)
+void Core_SHAKE::update(const void *data, size_t len)
 {
     if (finalized)
         reset();
     core.update(data, len);
 }
 
-void SHAKE::extend(uint8_t *data, size_t len)
+void Core_SHAKE::extend(uint8_t *data, size_t len)
 {
     if (!finalized) {
         core.pad(0x1F);
@@ -77,7 +77,7 @@ void SHAKE::extend(uint8_t *data, size_t len)
     core.extract(data, len);
 }
 
-void SHAKE::encrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_SHAKE::encrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     if (!finalized) {
         core.pad(0x1F);
@@ -86,7 +86,7 @@ void SHAKE::encrypt(uint8_t *output, const uint8_t *input, size_t len)
     core.encrypt(output, input, len);
 }
 
-void SHAKE::clear()
+void Core_SHAKE::clear()
 {
     core.clear();
     finalized = false;
@@ -110,7 +110,7 @@ void SHAKE::clear()
  * \brief Destroys this SHAKE128 object after clearing all sensitive
  * information.
  */
-SHAKE128::~SHAKE128()
+Core_SHAKE128::~Core_SHAKE128()
 {
 }
 
@@ -132,6 +132,6 @@ SHAKE128::~SHAKE128()
  * \brief Destroys this SHAKE256 object after clearing all sensitive
  * information.
  */
-SHAKE256::~SHAKE256()
+Core_SHAKE256::~Core_SHAKE256()
 {
 }

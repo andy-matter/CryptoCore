@@ -51,14 +51,14 @@
 /**
  * \brief Constructs a new authenticated cipher.
  */
-AuthenticatedCipher::AuthenticatedCipher()
+Core_AuthenticatedCipher::Core_AuthenticatedCipher()
 {
 }
 
 /**
  * \brief Destroys this authenticated cipher.
  */
-AuthenticatedCipher::~AuthenticatedCipher()
+Core_AuthenticatedCipher::~Core_AuthenticatedCipher()
 {
 }
 

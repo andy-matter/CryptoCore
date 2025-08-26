@@ -39,14 +39,14 @@
  *
  * This constructor should be followed by a call to setBlockCipher().
  */
-CTRCommon::CTRCommon()
+Core_CTRCommon::Core_CTRCommon()
     : blockCipher(0)
     , posn(16)
     , counterStart(0)
 {
 }
 
-CTRCommon::~CTRCommon()
+Core_CTRCommon::~Core_CTRCommon()
 {
     // It is assumed that the subclass will clear sensitive
     // information in the block cipher.
@@ -54,12 +54,12 @@ CTRCommon::~CTRCommon()
     clean(state);
 }
 
-size_t CTRCommon::keySize() const
+size_t Core_CTRCommon::keySize() const
 {
     return blockCipher->keySize();
 }
 
-size_t CTRCommon::ivSize() const
+size_t Core_CTRCommon::ivSize() const
 {
     return 16;
 }
@@ -83,7 +83,7 @@ size_t CTRCommon::ivSize() const
  *
  * \sa setIV()
  */
-bool CTRCommon::setCounterSize(size_t size)
+bool Core_CTRCommon::setCounterSize(size_t size)
 {
     if (size < 1 || size > 16)
         return false;
@@ -91,7 +91,7 @@ bool CTRCommon::setCounterSize(size_t size)
     return true;
 }
 
-bool CTRCommon::setKey(const uint8_t *key, size_t len)
+bool Core_CTRCommon::setKey(const uint8_t *key, size_t len)
 {
     // Verify the cipher's block size, just in case.
     if (blockCipher->blockSize() != 16)
@@ -116,7 +116,7 @@ bool CTRCommon::setKey(const uint8_t *key, size_t len)
  *
  * \sa encrypt(), setCounterSize()
  */
-bool CTRCommon::setIV(const uint8_t *iv, size_t len)
+bool Core_CTRCommon::setIV(const uint8_t *iv, size_t len)
 {
     if (len != 16)
         return false;
@@ -125,7 +125,7 @@ bool CTRCommon::setIV(const uint8_t *iv, size_t len)
     return true;
 }
 
-void CTRCommon::encrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_CTRCommon::encrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     while (len > 0) {
         if (posn >= 16) {
@@ -157,12 +157,12 @@ void CTRCommon::encrypt(uint8_t *output, const uint8_t *input, size_t len)
     }
 }
 
-void CTRCommon::decrypt(uint8_t *output, const uint8_t *input, size_t len)
+void Core_CTRCommon::decrypt(uint8_t *output, const uint8_t *input, size_t len)
 {
     encrypt(output, input, len);
 }
 
-void CTRCommon::clear()
+void Core_CTRCommon::clear()
 {
     blockCipher->clear();
     clean(counter);

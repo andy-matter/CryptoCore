@@ -20,22 +20,21 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_RNG_h
-#define CRYPTO_RNG_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class NoiseSource;
+class Core_NoiseSource;
 
-class RNGClass
+class Core_RNGClass
 {
 public:
-    RNGClass();
-    ~RNGClass();
+    Core_RNGClass();
+    ~Core_RNGClass();
 
     void begin(const char *tag);
-    void addNoiseSource(NoiseSource &source);
+    void addNoiseSource(Core_NoiseSource &source);
 
     void setAutoSaveTime(uint16_t minutes);
 
@@ -61,7 +60,7 @@ private:
     uint16_t trngPending : 1;
     unsigned long timer;
     unsigned long timeout;
-    NoiseSource *noiseSources[4];
+    Core_NoiseSource *noiseSources[4];
     uint8_t count;
     uint8_t trngPosn;
 
@@ -72,7 +71,6 @@ private:
 /* the STM32 tolkit defines its own RNG symbol, incompatible with the
    Crypto library: https://github.com/stm32duino/Arduino_Core_STM32 */
 #ifndef RNG
-extern RNGClass RNG;
+extern Core_RNGClass RNG;
 #endif
 
-#endif

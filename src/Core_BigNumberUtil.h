@@ -20,8 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_BIGNUMBERUTIL_h
-#define CRYPTO_BIGNUMBERUTIL_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
@@ -106,5 +105,3 @@ private:
     BigNumberUtil() {}
     ~BigNumberUtil() {}
 };
-
-#endif

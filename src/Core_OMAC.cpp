@@ -45,7 +45,7 @@
  * This constructor must be followed by a call to setBlockCipher()
  * to specify the block cipher to use.
  */
-OMAC::OMAC()
+Core_OMAC::Core_OMAC()
     : _blockCipher(0)
     , posn(0)
 {
@@ -56,7 +56,7 @@ OMAC::OMAC()
  *
  * \sa clear()
  */
-OMAC::~OMAC()
+Core_OMAC::~Core_OMAC()
 {
     clean(b);
 }
@@ -98,7 +98,7 @@ OMAC::~OMAC()
  *
  * \sa initNext(), update(), finalize()
  */
-void OMAC::initFirst(uint8_t omac[16])
+void Core_OMAC::initFirst(uint8_t omac[16])
 {
     // Start the OMAC context.  We assume that the data that follows
     // will be at least 1 byte in length so that we can encrypt the
@@ -110,7 +110,7 @@ void OMAC::initFirst(uint8_t omac[16])
     // Generate the B value from the encrypted block of zeroes.
     // We will need this later when finalising the OMAC hashes.
     memcpy(b, omac, 16);
-    GF128::dblEAX(b);
+    Core_GF128::dblEAX(b);
 }
 
 /**
@@ -124,7 +124,7 @@ void OMAC::initFirst(uint8_t omac[16])
  *
  * \sa initFirst(), update(), finalize()
  */
-void OMAC::initNext(uint8_t omac[16], uint8_t tag)
+void Core_OMAC::initNext(uint8_t omac[16], uint8_t tag)
 {
     memset(omac, 0, 15);
     omac[15] = tag;
@@ -140,7 +140,7 @@ void OMAC::initNext(uint8_t omac[16], uint8_t tag)
  *
  * \sa initFirst(), initNext(), finalize()
  */
-void OMAC::update(uint8_t omac[16], const uint8_t *data, size_t size)
+void Core_OMAC::update(uint8_t omac[16], const uint8_t *data, size_t size)
 {
     while (size > 0) {
         // Encrypt the current block if it is already full.
@@ -169,14 +169,14 @@ void OMAC::update(uint8_t omac[16], const uint8_t *data, size_t size)
  *
  * \sa initFirst(), initNext(), update()
  */
-void OMAC::finalize(uint8_t omac[16])
+void Core_OMAC::finalize(uint8_t omac[16])
 {
     // Apply padding if necessary.
     if (posn != 16) {
         // Need padding: XOR with P = 2 * B.
         uint32_t p[4];
         memcpy(p, b, 16);
-        GF128::dblEAX(p);
+        Core_GF128::dblEAX(p);
         omac[posn] ^= 0x80;
         for (uint8_t index = 0; index < 16; ++index)
             omac[index] ^= ((const uint8_t *)p)[index];
@@ -194,7 +194,7 @@ void OMAC::finalize(uint8_t omac[16])
 /**
  * \brief Clears all security-sensitive state from this object.
  */
-void OMAC::clear()
+void Core_OMAC::clear()
 {
     clean(b);
 }

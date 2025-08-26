@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_XOF_h
-#define CRYPTO_XOF_h
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
 
-class XOF
+class Core_XOF
 {
 public:
-    XOF();
-    virtual ~XOF();
+    Core_XOF();
+    virtual ~Core_XOF();
 
     virtual size_t blockSize() const = 0;
 
@@ -48,4 +47,3 @@ public:
     virtual void clear() = 0;
 };
 
-#endif

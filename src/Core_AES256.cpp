@@ -39,13 +39,13 @@
  * This constructor must be followed by a call to setKey() before the
  * block cipher can be used for encryption or decryption.
  */
-AES256::AES256()
+Core_AES256::Core_AES256()
 {
     rounds = 14;
     schedule = sched;
 }
 
-AES256::~AES256()
+Core_AES256::~Core_AES256()
 {
     clean(sched);
 }
@@ -54,12 +54,12 @@ AES256::~AES256()
  * \brief Size of a 256-bit AES key in bytes.
  * \return Always returns 32.
  */
-size_t AES256::keySize() const
+size_t Core_AES256::keySize() const
 {
     return 32;
 }
 
-bool AES256::setKey(const uint8_t *key, size_t len)
+bool Core_AES256::setKey(const uint8_t *key, size_t len)
 {
     if (len != 32)
         return false;
@@ -186,11 +186,11 @@ bool AES256::setKey(const uint8_t *key, size_t len)
  * This constructor must be followed by a call to setKey() before the
  * block cipher can be used for encryption or decryption.
  */
-AESTiny256::AESTiny256()
+Core_AESTiny256::Core_AESTiny256()
 {
 }
 
-AESTiny256::~AESTiny256()
+Core_AESTiny256::~Core_AESTiny256()
 {
     clean(schedule);
 }
@@ -199,7 +199,7 @@ AESTiny256::~AESTiny256()
  * \brief Size of an AES block in bytes.
  * \return Always returns 16.
  */
-size_t AESTiny256::blockSize() const
+size_t Core_AESTiny256::blockSize() const
 {
     return 16;
 }
@@ -208,12 +208,12 @@ size_t AESTiny256::blockSize() const
  * \brief Size of a 256-bit AES key in bytes.
  * \return Always returns 32.
  */
-size_t AESTiny256::keySize() const
+size_t Core_AESTiny256::keySize() const
 {
     return 32;
 }
 
-bool AESTiny256::setKey(const uint8_t *key, size_t len)
+bool Core_AESTiny256::setKey(const uint8_t *key, size_t len)
 {
     if (len == 32) {
         // Make a copy of the key - it will be expanded in encryptBlock().
@@ -223,7 +223,7 @@ bool AESTiny256::setKey(const uint8_t *key, size_t len)
     return false;
 }
 
-void AESTiny256::encryptBlock(uint8_t *output, const uint8_t *input)
+void Core_AESTiny256::encryptBlock(uint8_t *output, const uint8_t *input)
 {
     uint8_t schedule[32];
     uint8_t posn;
@@ -269,12 +269,12 @@ void AESTiny256::encryptBlock(uint8_t *output, const uint8_t *input)
         output[posn] = state2[posn] ^ schedule[posn];
 }
 
-void AESTiny256::decryptBlock(uint8_t *output, const uint8_t *input)
+void Core_AESTiny256::decryptBlock(uint8_t *output, const uint8_t *input)
 {
     // Decryption is not supported by AESTiny256.
 }
 
-void AESTiny256::clear()
+void Core_AESTiny256::clear()
 {
     clean(schedule);
 }
@@ -305,23 +305,23 @@ void AESTiny256::clear()
  * This constructor must be followed by a call to setKey() before the
  * block cipher can be used for encryption or decryption.
  */
-AESSmall256::AESSmall256()
+Core_AESSmall256::Core_AESSmall256()
 {
 }
 
-AESSmall256::~AESSmall256()
+Core_AESSmall256::~Core_AESSmall256()
 {
     clean(reverse);
 }
 
-bool AESSmall256::setKey(const uint8_t *key, size_t len)
+bool Core_AESSmall256::setKey(const uint8_t *key, size_t len)
 {
     uint8_t *schedule;
     uint8_t round;
     uint8_t temp[4];
 
     // Set the encryption key first.
-    if (!AESTiny256::setKey(key, len))
+    if (!Core_AESTiny256::setKey(key, len))
         return false;
 
     // Expand the key schedule up to the last round which gives
@@ -348,7 +348,7 @@ bool AESSmall256::setKey(const uint8_t *key, size_t len)
     return true;
 }
 
-void AESSmall256::decryptBlock(uint8_t *output, const uint8_t *input)
+void Core_AESSmall256::decryptBlock(uint8_t *output, const uint8_t *input)
 {
     uint8_t schedule[32];
     uint8_t round;
@@ -392,10 +392,10 @@ void AESSmall256::decryptBlock(uint8_t *output, const uint8_t *input)
         output[posn] = state2[posn] ^ schedule[posn];
 }
 
-void AESSmall256::clear()
+void Core_AESSmall256::clear()
 {
     clean(reverse);
-    AESTiny256::clear();
+    Core_AESTiny256::clear();
 }
 
 #endif // CRYPTO_AES_DEFAULT

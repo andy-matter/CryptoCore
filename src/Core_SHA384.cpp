@@ -47,17 +47,17 @@
 /**
  * \brief Constructs a SHA-384 hash object.
  */
-SHA384::SHA384()
+Core_SHA384::Core_SHA384()
 {
     reset();
 }
 
-size_t SHA384::hashSize() const
+size_t Core_SHA384::hashSize() const
 {
     return 48;
 }
 
-void SHA384::reset()
+void Core_SHA384::reset()
 {
     static uint64_t const hashStart[8] PROGMEM = {
         0xcbbb9d5dc1059ed8ULL, 0x629a292a367cd507ULL, 0x9159015a3070dd17ULL,

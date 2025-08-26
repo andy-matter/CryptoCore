@@ -20,13 +20,12 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_ED25519_h
-#define CRYPTO_ED25519_h
+#pragma once
 
 #include "Core_BigNumberUtil.h"
 #include "Core_SHA512.h"
 
-class Ed25519
+class Core_Ed25519
 {
 public:
     static void sign(uint8_t signature[64], const uint8_t privateKey[32],
@@ -40,8 +39,8 @@ public:
 
 private:
     // Constructor and destructor are private - cannot instantiate this class.
-    Ed25519();
-    ~Ed25519();
+    Core_Ed25519();
+    ~Core_Ed25519();
 
     // Curve point represented in extended homogeneous coordinates.
     struct Point
@@ -65,7 +64,6 @@ private:
     static void encodePoint(uint8_t *buf, Point &point);
     static bool decodePoint(Point &point, const uint8_t *buf);
 
-    static void deriveKeys(SHA512 *hash, limb_t *a, const uint8_t privateKey[32]);
+    static void deriveKeys(Core_SHA512 *hash, limb_t *a, const uint8_t privateKey[32]);
 };
 
-#endif

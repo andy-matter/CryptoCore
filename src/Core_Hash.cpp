@@ -33,7 +33,7 @@
 /**
  * \brief Constructs a new hash object.
  */
-Hash::Hash()
+Core_Hash::Core_Hash()
 {
 }
 
@@ -45,7 +45,7 @@ Hash::Hash()
  *
  * \sa clear()
  */
-Hash::~Hash()
+Core_Hash::~Core_Hash()
 {
 }
 
@@ -159,7 +159,7 @@ Hash::~Hash()
  * finalizeHMAC() by directly formatting the HMAC key into the subclass's
  * internal block buffer and resetting the hash.
  */
-void Hash::formatHMACKey(void *block, const void *key, size_t len, uint8_t pad)
+void Core_Hash::formatHMACKey(void *block, const void *key, size_t len, uint8_t pad)
 {
     size_t size = blockSize();
     reset();

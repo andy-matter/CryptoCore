@@ -20,17 +20,16 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CRYPTO_XTS_h
-#define CRYPTO_XTS_h
+#pragma once
 
 #include "Core_BlockCipher.h"
 
-class XTSSingleKeyCommon;
+class Core_XTSSingleKeyCommon;
 
-class XTSCommon
+class Core_XTSCommon
 {
 public:
-    virtual ~XTSCommon();
+    virtual ~Core_XTSCommon();
 
     virtual size_t keySize() const;
     size_t tweakSize() const;
@@ -47,55 +46,57 @@ public:
     void clear();
 
 protected:
-    XTSCommon();
-    void setBlockCiphers(BlockCipher *cipher1, BlockCipher *cipher2)
+    Core_XTSCommon();
+    void setBlockCiphers(Core_BlockCipher *cipher1, Core_BlockCipher *cipher2)
     {
         blockCipher1 = cipher1;
         blockCipher2 = cipher2;
     }
 
 private:
-    BlockCipher *blockCipher1;
-    BlockCipher *blockCipher2;
+    Core_BlockCipher *blockCipher1;
+    Core_BlockCipher *blockCipher2;
     uint32_t twk[4];
     size_t sectSize;
 
-    friend class XTSSingleKeyCommon;
+    friend class Core_XTSSingleKeyCommon;
 };
 
-class XTSSingleKeyCommon : public XTSCommon
+
+class Core_XTSSingleKeyCommon : public Core_XTSCommon
 {
 public:
-    virtual ~XTSSingleKeyCommon();
+    virtual ~Core_XTSSingleKeyCommon();
 
     size_t keySize() const;
     bool setKey(const uint8_t *key, size_t len);
 
 protected:
-    XTSSingleKeyCommon() : XTSCommon() {}
+    Core_XTSSingleKeyCommon() : Core_XTSCommon() {}
 };
 
+
 template <typename T1, typename T2 = T1>
-class XTS : public XTSCommon
+class Core_XTS : public Core_XTSCommon
 {
 public:
-    XTS() { setBlockCiphers(&cipher1, &cipher2); }
-    ~XTS() {}
+    Core_XTS() { setBlockCiphers(&cipher1, &cipher2); }
+    ~Core_XTS() {}
 
 private:
     T1 cipher1;
     T2 cipher2;
 };
 
+
 template <typename T>
-class XTSSingleKey : public XTSSingleKeyCommon
+class Core_XTSSingleKey : public Core_XTSSingleKeyCommon
 {
 public:
-    XTSSingleKey() { setBlockCiphers(&cipher, &cipher); }
-    ~XTSSingleKey() {}
+    Core_XTSSingleKey() { setBlockCiphers(&cipher, &cipher); }
+    ~Core_XTSSingleKey() {}
 
 private:
     T cipher;
 };
 
-#endif

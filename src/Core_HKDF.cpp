@@ -38,7 +38,7 @@
  *
  * This constructor must be followed by a call to setHashAlgorithm().
  */
-HKDFCommon::HKDFCommon()
+Core_HKDFCommon::Core_HKDFCommon()
     : hash(0)
     , buf(0)
     , counter(1)
@@ -49,7 +49,7 @@ HKDFCommon::HKDFCommon()
 /**
  * \brief Destroys this HKDF instance.
  */
-HKDFCommon::~HKDFCommon()
+Core_HKDFCommon::~Core_HKDFCommon()
 {
 }
 
@@ -61,7 +61,7 @@ HKDFCommon::~HKDFCommon()
  * \param salt Points to the salt.
  * \param saltLen Length of the \a salt in bytes.
  */
-void HKDFCommon::setKey(const void *key, size_t keyLen, const void *salt, size_t saltLen)
+void Core_HKDFCommon::setKey(const void *key, size_t keyLen, const void *salt, size_t saltLen)
 {
     // Initialise the HKDF context with the key and salt to generate the PRK.
     size_t hashSize = hash->hashSize();
@@ -93,7 +93,7 @@ void HKDFCommon::setKey(const void *key, size_t keyLen, const void *salt, size_t
  * should be extracted from a HKDF session.  This maximum is not
  * enforced by this function.
  */
-void HKDFCommon::extract(void *out, size_t outLen, const void *info, size_t infoLen)
+void Core_HKDFCommon::extract(void *out, size_t outLen, const void *info, size_t infoLen)
 {
     size_t hashSize = hash->hashSize();
     uint8_t *outPtr = (uint8_t *)out;
@@ -125,7 +125,7 @@ void HKDFCommon::extract(void *out, size_t outLen, const void *info, size_t info
 /**
  * \brief Clears sensitive information from this HKDF instance.
  */
-void HKDFCommon::clear()
+void Core_HKDFCommon::clear()
 {
     size_t hashSize = hash->hashSize();
     hash->clear();

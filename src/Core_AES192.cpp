@@ -39,13 +39,13 @@
  * This constructor must be followed by a call to setKey() before the
  * block cipher can be used for encryption or decryption.
  */
-AES192::AES192()
+Core_AES192::Core_AES192()
 {
     rounds = 12;
     schedule = sched;
 }
 
-AES192::~AES192()
+Core_AES192::~Core_AES192()
 {
     clean(sched);
 }
@@ -54,12 +54,12 @@ AES192::~AES192()
  * \brief Size of a 192-bit AES key in bytes.
  * \return Always returns 24.
  */
-size_t AES192::keySize() const
+size_t Core_AES192::keySize() const
 {
     return 24;
 }
 
-bool AES192::setKey(const uint8_t *key, size_t len)
+bool Core_AES192::setKey(const uint8_t *key, size_t len)
 {
     if (len != 24)
         return false;

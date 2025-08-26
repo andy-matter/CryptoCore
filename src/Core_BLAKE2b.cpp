@@ -82,7 +82,7 @@
 /**
  * \brief Constructs a BLAKE2b hash object.
  */
-BLAKE2b::BLAKE2b()
+Core_BLAKE2b::Core_BLAKE2b()
 {
     reset();
 }
@@ -91,17 +91,17 @@ BLAKE2b::BLAKE2b()
  * \brief Destroys this BLAKE2b hash object after clearing
  * sensitive information.
  */
-BLAKE2b::~BLAKE2b()
+Core_BLAKE2b::~Core_BLAKE2b()
 {
     clean(state);
 }
 
-size_t BLAKE2b::hashSize() const
+size_t Core_BLAKE2b::hashSize() const
 {
     return 64;
 }
 
-size_t BLAKE2b::blockSize() const
+size_t Core_BLAKE2b::blockSize() const
 {
     return 128;
 }
@@ -116,7 +116,7 @@ size_t BLAKE2b::blockSize() const
 #define BLAKE2b_IV6 0x1f83d9abfb41bd6bULL
 #define BLAKE2b_IV7 0x5be0cd19137e2179ULL
 
-void BLAKE2b::reset()
+void Core_BLAKE2b::reset()
 {
     state.h[0] = BLAKE2b_IV0 ^ 0x01010040; // Default output length of 64.
     state.h[1] = BLAKE2b_IV1;
@@ -138,7 +138,7 @@ void BLAKE2b::reset()
  * \param outputLength The output length to use for the final hash in bytes,
  * between 1 and 64.
  */
-void BLAKE2b::reset(uint8_t outputLength)
+void Core_BLAKE2b::reset(uint8_t outputLength)
 {
     if (outputLength < 1)
         outputLength = 1;
@@ -169,7 +169,7 @@ void BLAKE2b::reset(uint8_t outputLength)
  * If \a keyLen is greater than 64, then the \a key will be truncated to
  * the first 64 bytes.
  */
-void BLAKE2b::reset(const void *key, size_t keyLen, uint8_t outputLength)
+void Core_BLAKE2b::reset(const void *key, size_t keyLen, uint8_t outputLength)
 {
     if (keyLen > 64)
         keyLen = 64;
@@ -199,7 +199,7 @@ void BLAKE2b::reset(const void *key, size_t keyLen, uint8_t outputLength)
     state.lengthHigh = 0;
 }
 
-void BLAKE2b::update(const void *data, size_t len)
+void Core_BLAKE2b::update(const void *data, size_t len)
 {
     // Break the input up into 1024-bit chunks and process each in turn.
     const uint8_t *d = (const uint8_t *)data;
@@ -224,7 +224,7 @@ void BLAKE2b::update(const void *data, size_t len)
     }
 }
 
-void BLAKE2b::finalize(void *hash, size_t len)
+void Core_BLAKE2b::finalize(void *hash, size_t len)
 {
     // Pad the last chunk and hash it with f0 set to all-ones.
     memset(((uint8_t *)state.m) + state.chunkSize, 0, 128 - state.chunkSize);
@@ -240,20 +240,20 @@ void BLAKE2b::finalize(void *hash, size_t len)
     memcpy(hash, state.m, len);
 }
 
-void BLAKE2b::clear()
+void Core_BLAKE2b::clear()
 {
     clean(state);
     reset();
 }
 
-void BLAKE2b::resetHMAC(const void *key, size_t keyLen)
+void Core_BLAKE2b::resetHMAC(const void *key, size_t keyLen)
 {
     formatHMACKey(state.m, key, keyLen, 0x36);
     state.lengthLow += 128;
     state.chunkSize = 128;
 }
 
-void BLAKE2b::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
+void Core_BLAKE2b::finalizeHMAC(const void *key, size_t keyLen, void *hash, size_t hashLen)
 {
     uint8_t temp[64];
     finalize(temp, sizeof(temp));
@@ -297,7 +297,7 @@ static const uint8_t sigma[12][16] PROGMEM = {
         (c) = _c; \
     } while (0)
 
-void BLAKE2b::processChunk(uint64_t f0)
+void Core_BLAKE2b::processChunk(uint64_t f0)
 {
     uint8_t index;
     uint64_t v[16];

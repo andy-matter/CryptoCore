@@ -132,7 +132,7 @@ static limb_t const P521_Gy[NUM_LIMBS_521BIT] PROGMEM = {
  *
  * \sa dh1(), sign()
  */
-bool P521::eval(uint8_t result[132], const uint8_t f[66], const uint8_t point[132])
+bool Core_P521::eval(uint8_t result[132], const uint8_t f[66], const uint8_t point[132])
 {
     limb_t x[NUM_LIMBS_521BIT];
     limb_t y[NUM_LIMBS_521BIT];
@@ -205,7 +205,7 @@ bool P521::eval(uint8_t result[132], const uint8_t f[66], const uint8_t point[13
  *
  * \sa dh2()
  */
-void P521::dh1(uint8_t k[132], uint8_t f[66])
+void Core_P521::dh1(uint8_t k[132], uint8_t f[66])
 {
     generatePrivateKey(f);
     derivePublicKey(k, f);
@@ -226,7 +226,7 @@ void P521::dh1(uint8_t k[132], uint8_t f[66])
  *
  * \sa dh1()
  */
-bool P521::dh2(const uint8_t k[132], uint8_t f[66])
+bool Core_P521::dh2(const uint8_t k[132], uint8_t f[66])
 {
     // Unpack the (x, y) point from k.
     limb_t x[NUM_LIMBS_521BIT];
@@ -273,8 +273,8 @@ bool P521::dh2(const uint8_t k[132], uint8_t f[66])
  *
  * \sa verify(), generatePrivateKey()
  */
-void P521::sign(uint8_t signature[132], const uint8_t privateKey[66],
-                const void *message, size_t len, Hash *hash)
+void Core_P521::sign(uint8_t signature[132], const uint8_t privateKey[66],
+                const void *message, size_t len, Core_Hash *hash)
 {
     uint8_t hm[66];
     uint8_t k[66];
@@ -370,9 +370,9 @@ void P521::sign(uint8_t signature[132], const uint8_t privateKey[66],
  *
  * \sa sign()
  */
-bool P521::verify(const uint8_t signature[132],
+bool Core_P521::verify(const uint8_t signature[132],
                   const uint8_t publicKey[132],
-                  const void *message, size_t len, Hash *hash)
+                  const void *message, size_t len, Core_Hash *hash)
 {
     limb_t x[NUM_LIMBS_521BIT];
     limb_t y[NUM_LIMBS_521BIT];
@@ -463,7 +463,7 @@ failed:
  *
  * \sa derivePublicKey(), sign()
  */
-void P521::generatePrivateKey(uint8_t privateKey[66])
+void Core_P521::generatePrivateKey(uint8_t privateKey[66])
 {
     // Generate a random 521-bit value for the private key.  The value
     // must be generated uniformly at random between 1 and q - 1 where q
@@ -494,7 +494,7 @@ void P521::generatePrivateKey(uint8_t privateKey[66])
  *
  * \sa generatePrivateKey(), verify()
  */
-void P521::derivePublicKey(uint8_t publicKey[132], const uint8_t privateKey[66])
+void Core_P521::derivePublicKey(uint8_t publicKey[132], const uint8_t privateKey[66])
 {
     // Evaluate the curve function starting with the generator.
     limb_t x[NUM_LIMBS_521BIT];
@@ -521,7 +521,7 @@ void P521::derivePublicKey(uint8_t publicKey[132], const uint8_t privateKey[66])
  *
  * \sa isValidPublicKey()
  */
-bool P521::isValidPrivateKey(const uint8_t privateKey[66])
+bool Core_P521::isValidPrivateKey(const uint8_t privateKey[66])
 {
     // The value "q" as a byte array from most to least significant.
     static uint8_t const P521_q_bytes[66] PROGMEM = {
@@ -561,7 +561,7 @@ bool P521::isValidPrivateKey(const uint8_t privateKey[66])
  *
  * \sa isValidPrivateKey()
  */
-bool P521::isValidPublicKey(const uint8_t publicKey[132])
+bool Core_P521::isValidPublicKey(const uint8_t publicKey[132])
 {
     limb_t x[NUM_LIMBS_521BIT];
     limb_t y[NUM_LIMBS_521BIT];
@@ -594,7 +594,7 @@ bool P521::isValidPublicKey(const uint8_t publicKey[132])
  * \param f The 521-bit scalar to multiply (x, y) by, most significant
  * bit first.
  */
-void P521::evaluate(limb_t *x, limb_t *y, const uint8_t f[66])
+void Core_P521::evaluate(limb_t *x, limb_t *y, const uint8_t f[66])
 {
     limb_t x1[NUM_LIMBS_521BIT];
     limb_t y1[NUM_LIMBS_521BIT];
@@ -673,7 +673,7 @@ void P521::evaluate(limb_t *x, limb_t *y, const uint8_t f[66])
  *
  * The Z values for the two points are assumed to be 1.
  */
-void P521::addAffine(limb_t *x1, limb_t *y1, const limb_t *x2, const limb_t *y2)
+void Core_P521::addAffine(limb_t *x1, limb_t *y1, const limb_t *x2, const limb_t *y2)
 {
     limb_t xout[NUM_LIMBS_521BIT];
     limb_t yout[NUM_LIMBS_521BIT];
@@ -711,7 +711,7 @@ void P521::addAffine(limb_t *x1, limb_t *y1, const limb_t *x2, const limb_t *y2)
  *
  * \sa inRange()
  */
-bool P521::validate(const limb_t *x, const limb_t *y)
+bool Core_P521::validate(const limb_t *x, const limb_t *y)
 {
     bool result;
 
@@ -745,7 +745,7 @@ bool P521::validate(const limb_t *x, const limb_t *y)
  *
  * \sa validate()
  */
-bool P521::inRange(const limb_t *x)
+bool Core_P521::inRange(const limb_t *x)
 {
     // Do a trial subtraction of 2^521 - 1 from x, which is equivalent
     // to adding 1 and subtracting 2^521.  We only need the carry.
@@ -780,7 +780,7 @@ bool P521::inRange(const limb_t *x)
  * limbs in size and less than square(2^521 - 1).  This array can be
  * the same as \a result.
  */
-void P521::reduce(limb_t *result, const limb_t *x)
+void Core_P521::reduce(limb_t *result, const limb_t *x)
 {
 #if BIGNUMBER_LIMB_16BIT || BIGNUMBER_LIMB_32BIT || BIGNUMBER_LIMB_64BIT
     // According to NIST FIPS 186-4, we add the high 521 bits to the
@@ -863,7 +863,7 @@ void P521::reduce(limb_t *result, const limb_t *x)
  * the caller knows that \a x is within the described range.  A single
  * trial subtraction is all that is needed to reduce the number.
  */
-void P521::reduceQuick(limb_t *x)
+void Core_P521::reduceQuick(limb_t *x)
 {
     // Perform a trial subtraction of 2^521 - 1 from x.  This is
     // equivalent to adding 1 and subtracting 2^521 - 1.
@@ -913,7 +913,7 @@ void P521::reduceQuick(limb_t *x)
  *
  * \sa mul()
  */
-void P521::mulNoReduce(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_P521::mulNoReduce(limb_t *result, const limb_t *x, const limb_t *y)
 {
     uint8_t i, j;
     dlimb_t carry;
@@ -959,7 +959,7 @@ void P521::mulNoReduce(limb_t *result, const limb_t *x, const limb_t *y)
  * \param y The second value to multiply, which must be NUM_LIMBS_521BIT limbs
  * in size and less than 2^521 - 1.  This can be the same array as \a x.
  */
-void P521::mul(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_P521::mul(limb_t *result, const limb_t *x, const limb_t *y)
 {
     limb_t temp[NUM_LIMBS_1042BIT];
     mulNoReduce(temp, x, y);
@@ -987,7 +987,7 @@ void P521::mul(limb_t *result, const limb_t *x, const limb_t *y)
  * in size and less than 2^521 - 1.
  * \param y The second value to multiply, which must be less than 128.
  */
-void P521::mulLiteral(limb_t *result, const limb_t *x, limb_t y)
+void Core_P521::mulLiteral(limb_t *result, const limb_t *x, limb_t y)
 {
     uint8_t index;
     dlimb_t carry = 0;
@@ -1066,7 +1066,7 @@ void P521::mulLiteral(limb_t *result, const limb_t *x, limb_t y)
  * \param y The second value to multiply, which must be NUM_LIMBS_521BIT
  * limbs in size and less than 2^521 - 1.
  */
-void P521::add(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_P521::add(limb_t *result, const limb_t *x, const limb_t *y)
 {
     dlimb_t carry = 0;
     limb_t *rr = result;
@@ -1089,7 +1089,7 @@ void P521::add(limb_t *result, const limb_t *x, const limb_t *y)
  * \param y The second value to multiply, which must be NUM_LIMBS_521BIT
  * limbs in size and less than 2^521 - 1.
  */
-void P521::sub(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_P521::sub(limb_t *result, const limb_t *x, const limb_t *y)
 {
     dlimb_t borrow;
     uint8_t posn;
@@ -1137,7 +1137,7 @@ void P521::sub(limb_t *result, const limb_t *x, const limb_t *y)
  *
  * Reference: http://hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-3.html#doubling-dbl-2001-b
  */
-void P521::dblPoint(limb_t *xout, limb_t *yout, limb_t *zout,
+void Core_P521::dblPoint(limb_t *xout, limb_t *yout, limb_t *zout,
                     const limb_t *xin, const limb_t *yin,
                     const limb_t *zin)
 {
@@ -1198,7 +1198,7 @@ void P521::dblPoint(limb_t *xout, limb_t *yout, limb_t *zout,
  *
  * Reference: http://hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-3.html#addition-add-2007-bl
  */
-void P521::addPoint(limb_t *xout, limb_t *yout, limb_t *zout,
+void Core_P521::addPoint(limb_t *xout, limb_t *yout, limb_t *zout,
                     const limb_t *x1, const limb_t *y1,
                     const limb_t *z1, const limb_t *x2,
                     const limb_t *y2)
@@ -1270,7 +1270,7 @@ void P521::addPoint(limb_t *xout, limb_t *yout, limb_t *zout,
  *
  * \sa cmove1()
  */
-void P521::cmove(limb_t select, limb_t *x, const limb_t *y)
+void Core_P521::cmove(limb_t select, limb_t *x, const limb_t *y)
 {
     uint8_t posn;
     limb_t dummy;
@@ -1299,7 +1299,7 @@ void P521::cmove(limb_t select, limb_t *x, const limb_t *y)
  *
  * \sa cmove()
  */
-void P521::cmove1(limb_t select, limb_t *x)
+void Core_P521::cmove1(limb_t select, limb_t *x)
 {
     uint8_t posn;
     limb_t dummy;
@@ -1327,7 +1327,7 @@ void P521::cmove1(limb_t select, limb_t *x)
  * \param x The number to compute the reciprocal for, also NUM_LIMBS_521BIT
  * limbs in size.
  */
-void P521::recip(limb_t *result, const limb_t *x)
+void Core_P521::recip(limb_t *result, const limb_t *x)
 {
     limb_t t1[NUM_LIMBS_521BIT];
 
@@ -1378,7 +1378,7 @@ void P521::recip(limb_t *result, const limb_t *x)
  *
  * It is allowed for \a result to be the same as \a r.
  */
-void P521::reduceQ(limb_t *result, const limb_t *r)
+void Core_P521::reduceQ(limb_t *result, const limb_t *r)
 {
     // Algorithm from: http://en.wikipedia.org/wiki/Barrett_reduction
     //
@@ -1446,7 +1446,7 @@ void P521::reduceQ(limb_t *result, const limb_t *r)
  * \param y The second value to multiply, which must be NUM_LIMBS_521BIT limbs
  * in size and less than q.  This can be the same array as \a x.
  */
-void P521::mulQ(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_P521::mulQ(limb_t *result, const limb_t *x, const limb_t *y)
 {
     limb_t temp[NUM_LIMBS_1042BIT];
     mulNoReduce(temp, x, y);
@@ -1462,7 +1462,7 @@ void P521::mulQ(limb_t *result, const limb_t *x, const limb_t *y)
  * \param x The number to compute the reciprocal for, also NUM_LIMBS_521BIT
  * limbs in size.
  */
-void P521::recipQ(limb_t *result, const limb_t *x)
+void Core_P521::recipQ(limb_t *result, const limb_t *x)
 {
     // Bottom 265 bits of q - 2.  The top 256 bits are all-1's.
     static limb_t const P521_q_m2[] PROGMEM = {
@@ -1512,8 +1512,8 @@ void P521::recipQ(limb_t *result, const limb_t *x)
  * \param count Iteration counter for generating new values of k when the
  * previous one is rejected.
  */
-void P521::generateK(uint8_t k[66], const uint8_t hm[66],
-                     const uint8_t x[66], Hash *hash, uint64_t count)
+void Core_P521::generateK(uint8_t k[66], const uint8_t hm[66],
+                     const uint8_t x[66], Core_Hash *hash, uint64_t count)
 {
     size_t hlen = hash->hashSize();
     uint8_t V[64];
@@ -1634,9 +1634,9 @@ void P521::generateK(uint8_t k[66], const uint8_t hm[66],
  * This override uses SHA512 to generate k values.  It is used when
  * sign() was not passed an explicit hash object by the application.
  */
-void P521::generateK(uint8_t k[66], const uint8_t hm[66],
+void Core_P521::generateK(uint8_t k[66], const uint8_t hm[66],
                      const uint8_t x[66], uint64_t count)
 {
-    SHA512 hash;
+    Core_SHA512 hash;
     generateK(k, hm, x, &hash, count);
 }

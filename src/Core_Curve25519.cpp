@@ -77,7 +77,7 @@
  *
  * \sa dh1(), dh2()
  */
-bool Curve25519::eval(uint8_t result[32], const uint8_t s[32], const uint8_t x[32])
+bool Core_Curve25519::eval(uint8_t result[32], const uint8_t s[32], const uint8_t x[32])
 {
     limb_t x_1[NUM_LIMBS_256BIT];
     limb_t x_2[NUM_LIMBS_256BIT];
@@ -242,7 +242,7 @@ bool Curve25519::eval(uint8_t result[32], const uint8_t s[32], const uint8_t x[3
  *
  * \sa dh2()
  */
-void Curve25519::dh1(uint8_t k[32], uint8_t f[32])
+void Core_Curve25519::dh1(uint8_t k[32], uint8_t f[32])
 {
     do {
         // Generate a random "f" value and then adjust the value to make
@@ -280,7 +280,7 @@ void Curve25519::dh1(uint8_t k[32], uint8_t f[32])
  *
  * \sa dh1()
  */
-bool Curve25519::dh2(uint8_t k[32], uint8_t f[32])
+bool Core_Curve25519::dh2(uint8_t k[32], uint8_t f[32])
 {
     uint8_t weak;
 
@@ -304,7 +304,7 @@ bool Curve25519::dh2(uint8_t k[32], uint8_t f[32])
  * \return Returns 1 if \a k is weak for contributory behavior or
  * returns zero if \a k is not weak.
  */
-uint8_t Curve25519::isWeakPoint(const uint8_t k[32])
+uint8_t Core_Curve25519::isWeakPoint(const uint8_t k[32])
 {
     // List of weak points from http://cr.yp.to/ecdh.html
     // That page lists some others but they are variants on these
@@ -363,7 +363,7 @@ uint8_t Curve25519::isWeakPoint(const uint8_t k[32])
  * the size of \a x in limbs.  If it is shorter than NUM_LIMBS_256BIT
  * then the reduction can be performed quicker.
  */
-void Curve25519::reduce(limb_t *result, limb_t *x, uint8_t size)
+void Core_Curve25519::reduce(limb_t *result, limb_t *x, uint8_t size)
 {
     /*
     Note: This explaination is best viewed with a UTF-8 text viewer.
@@ -643,7 +643,7 @@ void Curve25519::reduce(limb_t *result, limb_t *x, uint8_t size)
  * the caller knows that \a x is within the described range.  A single
  * trial subtraction is all that is needed to reduce the number.
  */
-limb_t Curve25519::reduceQuick(limb_t *x)
+limb_t Core_Curve25519::reduceQuick(limb_t *x)
 {
 #if !defined(CURVE25519_ASM_AVR)
     limb_t temp[NUM_LIMBS_256BIT];
@@ -776,7 +776,7 @@ limb_t Curve25519::reduceQuick(limb_t *x)
  *
  * \sa mul()
  */
-void Curve25519::mulNoReduce(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_Curve25519::mulNoReduce(limb_t *result, const limb_t *x, const limb_t *y)
 {
 #if !defined(CURVE25519_ASM_AVR)
     uint8_t i, j;
@@ -928,7 +928,7 @@ void Curve25519::mulNoReduce(limb_t *result, const limb_t *x, const limb_t *y)
  * \param y The second value to multiply, which must be NUM_LIMBS_256BIT limbs
  * in size and less than 2^255 - 19.  This can be the same array as \a x.
  */
-void Curve25519::mul(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_Curve25519::mul(limb_t *result, const limb_t *x, const limb_t *y)
 {
     limb_t temp[NUM_LIMBS_512BIT];
     mulNoReduce(temp, x, y);
@@ -956,7 +956,7 @@ void Curve25519::mul(limb_t *result, const limb_t *x, const limb_t *y)
  * \param x The value to multiply by a24, which must be NUM_LIMBS_256BIT
  * limbs in size and less than 2^255 - 19.
  */
-void Curve25519::mulA24(limb_t *result, const limb_t *x)
+void Core_Curve25519::mulA24(limb_t *result, const limb_t *x)
 {
 #if !defined(CURVE25519_ASM_AVR)
     // The constant a24 = 121665 (0x1DB41) as a limb array.
@@ -1065,7 +1065,7 @@ void Curve25519::mulA24(limb_t *result, const limb_t *x)
  * \param y The second value to multiply, which must be NUM_LIMBS_256BIT limbs
  * in size and less than 2^255 - 19.  This array must be in program memory.
  */
-void Curve25519::mul_P(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_Curve25519::mul_P(limb_t *result, const limb_t *x, const limb_t *y)
 {
     limb_t temp[NUM_LIMBS_512BIT];
     uint8_t i, j;
@@ -1116,7 +1116,7 @@ void Curve25519::mul_P(limb_t *result, const limb_t *x, const limb_t *y)
  * \param y The second value to multiply, which must be NUM_LIMBS_256BIT
  * limbs in size and less than 2^255 - 19.
  */
-void Curve25519::add(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_Curve25519::add(limb_t *result, const limb_t *x, const limb_t *y)
 {
 #if !defined(CURVE25519_ASM_AVR)
     dlimb_t carry = 0;
@@ -1191,7 +1191,7 @@ void Curve25519::add(limb_t *result, const limb_t *x, const limb_t *y)
  * \param y The second value to multiply, which must be NUM_LIMBS_256BIT
  * limbs in size and less than 2^255 - 19.
  */
-void Curve25519::sub(limb_t *result, const limb_t *x, const limb_t *y)
+void Core_Curve25519::sub(limb_t *result, const limb_t *x, const limb_t *y)
 {
 #if !defined(CURVE25519_ASM_AVR)
     dlimb_t borrow;
@@ -1308,7 +1308,7 @@ void Curve25519::sub(limb_t *result, const limb_t *x, const limb_t *y)
  *
  * \sa cmove()
  */
-void Curve25519::cswap(limb_t select, limb_t *x, limb_t *y)
+void Core_Curve25519::cswap(limb_t select, limb_t *x, limb_t *y)
 {
 #if !defined(CURVE25519_ASM_AVR)
     uint8_t posn;
@@ -1408,7 +1408,7 @@ void Curve25519::cswap(limb_t select, limb_t *x, limb_t *y)
  *
  * \sa cswap()
  */
-void Curve25519::cmove(limb_t select, limb_t *x, const limb_t *y)
+void Core_Curve25519::cmove(limb_t select, limb_t *x, const limb_t *y)
 {
 #if !defined(CURVE25519_ASM_AVR)
     uint8_t posn;
@@ -1488,7 +1488,7 @@ void Curve25519::cmove(limb_t select, limb_t *x, const limb_t *y)
  * \param result The result array, which must be NUM_LIMBS_256BIT limbs in size.
  * \param x The value to raise.
  */
-void Curve25519::pow250(limb_t *result, const limb_t *x)
+void Core_Curve25519::pow250(limb_t *result, const limb_t *x)
 {
     limb_t t1[NUM_LIMBS_256BIT];
     uint8_t i, j;
@@ -1536,7 +1536,7 @@ void Curve25519::pow250(limb_t *result, const limb_t *x)
  * This cannot be the same array as \a x.
  * \param x The number to compute the reciprocal for.
  */
-void Curve25519::recip(limb_t *result, const limb_t *x)
+void Core_Curve25519::recip(limb_t *result, const limb_t *x)
 {
     // The reciprocal is the same as x ^ (p - 2) where p = 2^255 - 19.
     // The big-endian hexadecimal expansion of (p - 2) is:
@@ -1570,7 +1570,7 @@ void Curve25519::recip(limb_t *result, const limb_t *x)
  * \note This function is not constant time so it should only be used
  * on publicly-known values.
  */
-bool Curve25519::sqrt(limb_t *result, const limb_t *x)
+bool Core_Curve25519::sqrt(limb_t *result, const limb_t *x)
 {
     // sqrt(-1) mod (2^255 - 19).
     static limb_t const numSqrtM1[NUM_LIMBS_256BIT] PROGMEM = {
